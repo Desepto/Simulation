@@ -1,3 +1,8 @@
+#ifndef POMPE_H
+#define POMPE_H
+using namespace std;
+#include <iostream>
+
 class Pompe
 {
 private :
@@ -6,20 +11,19 @@ private :
 	
 public :
 	Pompe();
-	Pompe(int etat);
-	Pompe(const Pompe &p);
+    Pompe(int etat);
 	
-	Pompe operator = (const Pompe &p);
-	
+    friend ostream& operator << (ostream & os, Pompe p);
 	void panne();
 	void marche();
 	void arret();
 	
-	int getEtat();
-	void toString();
+    int getEtat() const;
 	
 	
 	
 	~Pompe();
 	
 };
+
+#endif

@@ -1,3 +1,9 @@
+#ifndef VANNE_H
+#define VANNE_H
+
+using namespace std;
+#include <iostream>
+
 class Vanne
 {
 private :
@@ -5,11 +11,10 @@ private :
 	
 public :
 	Vanne();
-	Vanne(bool ouverture);
-	Vanne(const Vanne &v);
-	
-	Vanne operator = (const Vanne &r);
-	
+    Vanne(bool ouverture);
+
+    friend ostream & operator << (ostream& os, Vanne v);
+
 	void ouvrir();
 	void fermer();
 
@@ -20,3 +25,5 @@ public :
 	~Vanne();
 	
 };
+
+#endif

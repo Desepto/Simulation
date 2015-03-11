@@ -13,15 +13,14 @@ Vanne :: Vanne(bool ouverture)
 	this->ouvert = ouverture;
 }
 
-Vanne :: Vanne(const Vanne &r)
+ostream & operator << (ostream& os, Vanne v)
 {
-	this->ouvert = r.ouvert;
-}
+    if(v.getOuvert())
+        os << "Ceci est une vanne ouverte" << endl;
+    else
+        os << "Ceci est une vanne fermée" << endl;
 
-Vanne Vanne :: operator=(const Vanne &r)
-{
-	this->ouvert = r.ouvert;
-	return *this;
+    return os;
 }
 
 // Vidange et remplir sont des setteurs : Plus clair mais reviens à 
@@ -40,14 +39,6 @@ void Vanne :: ouvrir()
 bool Vanne :: getOuvert()
 {
 	return this->ouvert;
-}
-
-void Vanne :: toString()
-{
-	if(this->ouvert)
-		cout << "Ceci est une vanne ouverte" << endl;
-	else
-		cout << "Ceci est une vanne fermée" << endl;
 }
 
 Vanne :: ~Vanne()

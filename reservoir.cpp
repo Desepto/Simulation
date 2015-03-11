@@ -1,27 +1,29 @@
+using namespace std;
 #include <iostream>
 #include <string.h>
+#include "pompe.h"
 #include "reservoir.h"
-using namespace std;
 
-Reservoir :: Reservoir()
+
+Reservoir :: Reservoir() : p1(1), p2(0)
 {
-	this->rempli = false;
+    this->rempli = false;
 }
 
-Reservoir :: Reservoir(bool remplissage)
+Reservoir :: Reservoir(bool remplissage) : p1(1), p2(0)
 {
 	this->rempli = remplissage;
 }
 
-Reservoir :: Reservoir(const Reservoir &r)
-{
-	this->rempli = r.rempli;
-}
 
-Reservoir Reservoir :: operator=(const Reservoir &r)
+ostream & operator << (ostream& os, Reservoir r)
 {
-	this->rempli = r.rempli;
-	return *this;
+    if(r.getRempli())
+        os << "Ceci est un Réservoir rempli" << endl;
+    else
+        os << "Ceci est un Réservoir vide" << endl;
+
+    return os;
 }
 
 // Vidange et remplir sont des setteurs : Plus clair mais reviens à 
@@ -32,23 +34,11 @@ void Reservoir :: vidange()
 	this->rempli = false;
 }
 
-void Reservoir :: remplir()
-{
-	this->rempli = true;
-}
-
 bool Reservoir :: getRempli()
 {
 	return this->rempli;
 }
 
-void Reservoir :: toString()
-{
-	if(this->rempli)
-		cout << "Ceci est un Réservoir rempli" << endl;
-	else
-		cout << "Ceci est un Réservoir vide" << endl;
-}
 
 Reservoir :: ~Reservoir()
 {

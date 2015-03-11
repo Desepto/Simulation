@@ -1,7 +1,8 @@
+using namespace std;
 #include <iostream>
 #include <string.h>
 #include "pompe.h"
-using namespace std;
+
 
 Pompe :: Pompe()
 {
@@ -11,17 +12,6 @@ Pompe :: Pompe()
 Pompe :: Pompe(int etat)
 {
 	this->etat = etat;
-}
-
-Pompe :: Pompe(const Pompe &p)
-{
-	this->etat = p.etat;
-}
-
-Pompe Pompe :: operator=(const Pompe &p)
-{
-	this->etat = p.etat;
-	return *this;
 }
 
 //Ce sont des setteurs : Plus clair mais reviens à 
@@ -44,19 +34,23 @@ void Pompe :: marche()
 		this->etat = 1;
 }
 
-int Pompe :: getEtat()
+int Pompe :: getEtat() const
 {
 	return this->etat;
 }
 
-void Pompe :: toString()
+
+
+ostream & operator << (ostream & os, Pompe p)
 {
-	if(this->etat == -1)
-		cout << "Ceci est une pompe en panne" << endl;
-	else if(this->etat == 0)
-		cout << "Ceci est une pompe à l'arrêt" << endl;
-	else
-		cout << "Ceci est une pompe en marche" << endl;
+    if(p.getEtat() == -1)
+        os << "Ceci est une pompe en panne" << endl;
+    else if(p.getEtat() == 0)
+        os << "Ceci est une pompe à l'arrêt" << endl;
+    else
+        os << "Ceci est une pompe en marche" << endl;
+
+    return os;
 }
 
 Pompe :: ~Pompe()
