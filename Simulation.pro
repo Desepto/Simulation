@@ -3,11 +3,16 @@ HEADERS += \
     reservoir.h \
     pompe.h \
     main.h \
-    avion.h
+    avion.h \
+    mainwindow.h
 
 SOURCES += \
     vanne.cpp \
     reservoir.cpp \
     pompe.cpp \
     main.cpp \
-    avion.cpp
+    avion.cpp \
+    mainwindow.cpp
+
+FORMS += \
+    mainwindow.ui
