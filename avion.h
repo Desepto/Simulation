@@ -2,7 +2,7 @@
 #define AVION_H
 
 #include "reservoir.h"
-#include "bool.h"
+#include "vanne.h"
 
 class Avion
 {

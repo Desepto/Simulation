@@ -15,7 +15,20 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(Avion *a, QWidget *parent = 0);
     ~MainWindow();
-    
+
+public slots:
+    void panneP11();
+    void panneP12();
+    void panneP21();
+    void panneP22();
+    void panneP31();
+    void panneP32();
+
+    void vidangeR1();
+    void vidangeR2();
+    void vidangeR3();
+
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
