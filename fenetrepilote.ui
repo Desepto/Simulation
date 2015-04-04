@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>fenetrePilote</class>
+ <widget class="QMainWindow" name="fenetrePilote">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>291</width>
+    <height>125</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="V12">
+            <property name="text">
+             <string>V12</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="V23">
+            <property name="text">
+             <string>V23</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="P12">
+            <property name="text">
+             <string>P12</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="P22">
+            <property name="text">
+             <string>P22</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="P32">
+            <property name="text">
+             <string>P32</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="V21">
+            <property name="text">
+             <string>V21</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="V31">
+            <property name="text">
+             <string>V31</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="V32">
+            <property name="text">
+             <string>V32</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

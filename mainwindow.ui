@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>60</y>
+      <x>30</x>
+      <y>30</y>
       <width>738</width>
       <height>291</height>
      </rect>
@@ -305,7 +305,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>Images/rondVert.png</pixmap>
+              <pixmap resource="images.qrc">:/new/test/Images/rondVert.png</pixmap>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -318,7 +318,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>Images/rondRouge.png</pixmap>
+              <pixmap resource="images.qrc">:/new/test/Images/rondBleu.png</pixmap>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -513,7 +513,6 @@
    <addaction name="menuHistorique"/>
    <addaction name="menuAide"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLancer_Simulation">
    <property name="text">
     <string>Lancer Simulation</string>
@@ -535,6 +534,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -14,9 +14,9 @@ MainWindow::MainWindow(Avion* a,QWidget *parent) :
     connect(ui->P22, SIGNAL(clicked()), this, SLOT(panneP22()));
     connect(ui->P31, SIGNAL(clicked()), this, SLOT(panneP31()));
     connect(ui->P32, SIGNAL(clicked()), this, SLOT(panneP32()));
-    connect(ui->R1, SIGNAL(clicked()), this, SLOT(vidanceR1()));
-    connect(ui->R2, SIGNAL(clicked()), this, SLOT(vidanceR1()));
-    connect(ui->R3, SIGNAL(clicked()), this, SLOT(vidanceR1()));
+    connect(ui->R1, SIGNAL(clicked()), this, SLOT(vidangeR1()));
+    connect(ui->R2, SIGNAL(clicked()), this, SLOT(vidangeR2()));
+    connect(ui->R3, SIGNAL(clicked()), this, SLOT(vidangeR3()));
 
 }
 

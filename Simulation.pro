@@ -4,7 +4,8 @@ HEADERS += \
     pompe.h \
     main.h \
     avion.h \
-    mainwindow.h
+    mainwindow.h \
+    fenetrepilote.h
 
 SOURCES += \
     vanne.cpp \
@@ -12,7 +13,12 @@ SOURCES += \
     pompe.cpp \
     main.cpp \
     avion.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    fenetrepilote.cpp
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    fenetrepilote.ui
+
+RESOURCES += \
+    images.qrc
