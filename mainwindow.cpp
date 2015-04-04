@@ -18,6 +18,10 @@ MainWindow::MainWindow(Avion* a,QWidget *parent) :
     connect(ui->R2, SIGNAL(clicked()), this, SLOT(vidangeR2()));
     connect(ui->R3, SIGNAL(clicked()), this, SLOT(vidangeR3()));
 
+    this->move(0, 50);
+
+    QPalette green(Qt::green);
+    ui->F1->setPalette(green);
 }
 
 
@@ -29,6 +33,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::panneP11()
 {
+
+
 }
 
 void MainWindow::panneP12()

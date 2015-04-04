@@ -20,8 +20,6 @@ public :
 	
     int getEtat() const;
 	
-	
-	
 	~Pompe();
 	
 };

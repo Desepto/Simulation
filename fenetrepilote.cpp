@@ -16,10 +16,13 @@ fenetrePilote::fenetrePilote(Avion* a,QWidget *parent) :
     connect(ui->P12, SIGNAL(clicked()), this, SLOT(modifP12()));
     connect(ui->P22, SIGNAL(clicked()), this, SLOT(modifP22()));
     connect(ui->V32, SIGNAL(clicked()), this, SLOT(modifP32()));
+
+    this->move(841,50);
 }
 
 fenetrePilote::~fenetrePilote()
 {
+    cout << "Destruction fenetre pilote" << endl;
     delete ui;
 }
 
