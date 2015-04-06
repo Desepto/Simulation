@@ -1,7 +1,7 @@
 using namespace std;
 #include <iostream>
 #include <string.h>
-#include "pompe.h"
+#include "vanne.h"
 #include "reservoir.h"
 
 
@@ -36,30 +36,39 @@ void Reservoir :: vidange()
 
 bool Reservoir :: getRempli()
 {
-	return this->rempli;
+    return this->rempli;
 }
 
+QPalette Reservoir::getCouleur()
+{
+    if(this->rempli)
+        return Qt::green;
+    else
+        return Qt::blue;
+}
+
+Pompe Reservoir::getPompe1()
+{
+    return this->p1;
+}
+
+Pompe Reservoir::getPompe2()
+{
+    return this->p2;
+}
 
 Reservoir :: ~Reservoir()
 {
 	if(this->rempli)
 		cout << "Réservoir rempli détruit" << endl;
 	else
-		cout << "Réservoir vide détruit" << endl;
+        cout << "Réservoir vide détruit" << endl;
 }
 
- /*Méthode test
-int main()
+void Reservoir::reset()
 {
-	Reservoir r1(true); Reservoir r2(false);
-	
-	r1.toString();
-	r2.toString();
-	r1.vidange();
-	
-	r1.toString();
-	r2.toString();
-	
-	return 0;
-}*/
-	
+    this->rempli = true;
+    this->p1.marche();
+    this->p2.marche();
+}
+

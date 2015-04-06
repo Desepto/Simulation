@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include "avion.h"
+#include "fenetrepilote.h"
+
+class fenetrePilote;
 
 namespace Ui {
 class MainWindow;
@@ -13,10 +16,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(Avion *a, QWidget *parent = 0);
+    explicit MainWindow(Avion *a, QString nom, QWidget *parent = 0);
     ~MainWindow();
+    void addfenetre(fenetrePilote* f1);
+    void updateFenetre();
+    void updateReservoir();
+    void updatePompe();
+    void updateVanne();
 
 public slots:
+    void closeEvent(QCloseEvent *);
+
     void panneP11();
     void panneP12();
     void panneP21();
@@ -29,9 +39,24 @@ public slots:
     void vidangeR3();
 
 
+private slots:
+    void on_actionLancer_Simulation_triggered();
+
+    void on_actionStopper_simulation_triggered();
+
+    void on_actionR_initialiser_Simulation_triggered();
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
+    QString nom;
+    fenetrePilote* f1;
 };
 
 #endif // MAINWINDOW_H
+
+
+
+
+
+

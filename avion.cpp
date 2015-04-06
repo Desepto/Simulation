@@ -2,14 +2,22 @@
 
 Avion::Avion()
 {
-    this->r1 = new Reservoir(true);
-    this->r2 = new Reservoir(true);
-    this->r3 = new Reservoir(true);
-    this->v1 = new Vanne();
-    this->v2 = new Vanne();
-    this->v3 = new Vanne();
-    this->v4 = new Vanne();
-    this->v5 = new Vanne();
-
-
+    for(int i = 0; i < 3; i++)
+        this->R[i] = new Reservoir(true);
+    for(int i = 0; i < 5; i++)
+        this->V[i] = new Vanne();
 }
+
+void Avion::reset()
+{
+    for(int i = 0; i < 3; i++)
+        this->R[i].reset();
+    for(int i = 0; i < 5; i++)
+        this->V[i].fermer();
+}
+
+
+
+
+
+// IMPLEMENTER LES GETTERS/SETTERS

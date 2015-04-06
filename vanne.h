@@ -3,6 +3,7 @@
 
 using namespace std;
 #include <iostream>
+#include <QPixmap>
 
 class Vanne
 {
@@ -19,6 +20,7 @@ public :
 	void fermer();
 
 	bool getOuvert();
+    QPixmap getpixmap();
 	
     void toString();
 	

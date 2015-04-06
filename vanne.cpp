@@ -23,8 +23,7 @@ ostream & operator << (ostream& os, Vanne v)
     return os;
 }
 
-// Vidange et remplir sont des setteurs : Plus clair mais reviens à 
-//avoir la variable en public
+// Vidange et remplir sont des setteurs : Plus clair
 
 void Vanne :: fermer()
 {
@@ -38,7 +37,15 @@ void Vanne :: ouvrir()
 
 bool Vanne :: getOuvert()
 {
-	return this->ouvert;
+    return this->ouvert;
+}
+
+QPixmap Vanne::getpixmap()
+{
+    if(this->ouvert)
+        return QPixmap(":/icones/vert");
+    else
+        return QPixmap(":/icones/rouge");
 }
 
 Vanne :: ~Vanne()
@@ -48,27 +55,3 @@ Vanne :: ~Vanne()
 	else
 		cout << "Vanne fermée détruite" << endl;
 }
-
-/*
-int main()
-{
-	Vanne v1, v2(true);
-	
-	cout << "Vanne 1 : "; v1.toString();
-	cout << "Vanne 2 : "; v2.toString();
-	
-	v1.ouvrir(); v2.fermer();
-	
-	cout << "Vanne 1 : "; v1.toString();
-	cout << "Vanne 2 : "; v2.toString();
-	
-	v1 = v2;
-	
-	cout << "Vanne 1 : "; v1.toString();
-	cout << "Vanne 2 : "; v2.toString();
-	
-	
-	
-	return 1;
-}
-*/

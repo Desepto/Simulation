@@ -1,7 +1,7 @@
 <RCC>
-    <qresource prefix="/new/test">
-        <file>Images/rondVert.png</file>
-        <file>Images/rondBleu.png</file>
-        <file>Images/rondRouge.png</file>
+    <qresource prefix="/icones">
+        <file alias="vert">Images/rondVert.png</file>
+        <file alias="bleu">Images/rondBleu.png</file>
+        <file alias="rouge">Images/rondRouge.png</file>
     </qresource>
 </RCC>

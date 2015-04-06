@@ -7,6 +7,7 @@
 #include "mainwindow.h"
 #include "fenetrepilote.h"
 #include "avion.h"
+#include "identification.h"
 #include <QApplication>
 #include <QWidget>
 
@@ -25,10 +26,14 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     Avion* a = new Avion();
-    MainWindow fenetre1(a);
-    fenetrePilote fenetre2(a);
-    fenetre1.show();
-    fenetre2.show();
+  //  MainWindow fenetre1(a);
+  //  MainWindow* f1; f1 = fenetre1;
+   // fenetrePilote fenetre2(a);
+   // fenetrePilote* f2 = fenetre2;
+    Identification fenetre3(a);
+    //fenetre1.show();
+    //fenetre2.show();
+    fenetre3.show();
 
     return app.exec();
 }

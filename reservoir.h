@@ -3,6 +3,7 @@
 using namespace std;
 #include <iostream>
 #include "pompe.h"
+#include <QPalette>
 
 class Reservoir
 {
@@ -17,12 +18,13 @@ public :
 
     friend ostream & operator << (ostream& os, Reservoir r);
     void vidange();
-	bool getRempli();
-	void toString();
+    bool getRempli();
+    QPalette getCouleur();
 	
-    Pompe getPompe();
+    Pompe getPompe1();
+    Pompe getPompe2();
 
-	
+    void reset();
 	
 	~Reservoir();
 	

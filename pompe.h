@@ -19,6 +19,7 @@ public :
 	void arret();
 	
     int getEtat() const;
+
 	
 	~Pompe();
 	

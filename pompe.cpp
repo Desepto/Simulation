@@ -36,9 +36,8 @@ void Pompe :: marche()
 
 int Pompe :: getEtat() const
 {
-	return this->etat;
+    return this->etat;
 }
-
 
 
 ostream & operator << (ostream & os, Pompe p)
