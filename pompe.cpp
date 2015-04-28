@@ -3,7 +3,6 @@ using namespace std;
 #include <string.h>
 #include "pompe.h"
 
-
 Pompe :: Pompe()
 {
 	this->etat = -1;
@@ -39,6 +38,24 @@ int Pompe :: getEtat() const
     return this->etat;
 }
 
+bool Pompe::isMarche()
+{
+    if(this->etat == -1)
+        return false;
+    else
+        return true;
+}
+
+QPalette Pompe::getCouleur()
+{
+    if(this->etat == -1)
+        return Qt::blue;
+    else if(!this->etat)
+        return Qt::red;
+    else
+        return Qt::green;
+}
+
 
 ostream & operator << (ostream & os, Pompe p)
 {
@@ -62,29 +79,4 @@ Pompe :: ~Pompe()
 		cout << "Destruction d'une pompe en marche" << endl;
 }
 
-/* Méthode test
-int main()
-{
-	
-	
-	Pompe p1(0), p2(1), p3(-1);
-	
-	cout << "Pompe p1 " ; p1.toString();
-	cout << "Pompe p2 " ; p2.toString();
-	cout << "Pompe p3 " ; p3.toString();
-	
-	p1.marche();
-	p2.arret();
-	p3.marche();
-	p3.arret();
-	
-	
-	cout << "Pompe p1 " ; p1.toString();
-	cout << "Pompe p2 " ; p2.toString();
-	cout << "Pompe p3 " ; p3.toString();
-	
-	
-	return 1;
-}
-* */
 

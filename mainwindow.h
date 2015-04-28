@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "avion.h"
 #include "fenetrepilote.h"
+#include "aide.h"
 
 class fenetrePilote;
 
@@ -23,6 +24,7 @@ public:
     void updateReservoir();
     void updatePompe();
     void updateVanne();
+    void updateMoteur();
 
 public slots:
     void closeEvent(QCloseEvent *);
@@ -46,6 +48,10 @@ private slots:
 
     void on_actionR_initialiser_Simulation_triggered();
 
+    void on_actionChanger_Utilisateur_triggered();
+
+    void on_actionAfficher_Aide_triggered();
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
@@ -54,9 +60,4 @@ private:
 };
 
 #endif // MAINWINDOW_H
-
-
-
-
-
 

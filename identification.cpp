@@ -35,6 +35,7 @@ Identification::Identification(Avion *a, QWidget *parent) :
 
 }
 
+
 Identification::~Identification()
 {
     delete ui;

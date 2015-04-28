@@ -48,6 +48,14 @@ QPixmap Vanne::getpixmap()
         return QPixmap(":/icones/rouge");
 }
 
+QPalette Vanne::getCouleur()
+{
+    if(this->ouvert)
+        return Qt::green;
+    else
+        return Qt::red;
+}
+
 Vanne :: ~Vanne()
 {
 	if(this->ouvert)

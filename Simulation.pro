@@ -8,7 +8,8 @@ HEADERS += \
     avion.h \
     mainwindow.h \
     fenetrepilote.h \
-    identification.h
+    identification.h \
+    aide.h
 
 SOURCES += \
     vanne.cpp \
@@ -18,15 +19,18 @@ SOURCES += \
     avion.cpp \
     mainwindow.cpp \
     fenetrepilote.cpp \
-    identification.cpp
+    identification.cpp \
+    aide.cpp
 
 FORMS += \
     mainwindow.ui \
     fenetrepilote.ui \
-    identification.ui
+    identification.ui \
+    aide.ui
 
 RESOURCES += \
     images.qrc
 
 OTHER_FILES += \
-    ../Simulation-build-desktop-Qt_4_8_1_dans_le_PATH__Syst_me__Release/Simulation
+    ../Simulation-build-desktop-Qt_4_8_1_dans_le_PATH__Syst_me__Release/Simulation \
+    TO_DO-LIST.txt

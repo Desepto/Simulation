@@ -1745,9 +1745,6 @@
                </layout>
               </item>
              </layout>
-             <zorder>V21</zorder>
-             <zorder>label_8</zorder>
-             <zorder>verticalLayoutWidget_2</zorder>
             </widget>
            </item>
            <item>
@@ -2342,7 +2339,7 @@
                    <item row="0" column="0">
                     <layout class="QHBoxLayout" name="horizontalLayout_14">
                      <item>
-                      <widget class="QLabel" name="M11_2">
+                      <widget class="QLabel" name="M11">
                        <property name="text">
                         <string/>
                        </property>
@@ -2355,7 +2352,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="M12_2">
+                      <widget class="QLabel" name="M12">
                        <property name="text">
                         <string/>
                        </property>
@@ -2368,7 +2365,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="M13_2">
+                      <widget class="QLabel" name="M13">
                        <property name="text">
                         <string/>
                        </property>
@@ -3454,6 +3451,7 @@
     <property name="title">
      <string>Aide</string>
     </property>
+    <addaction name="actionAfficher_Aide"/>
    </widget>
    <addaction name="menuSimulation"/>
    <addaction name="menuUtilisateur"/>
@@ -3505,6 +3503,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionAfficher_Aide">
+   <property name="text">
+    <string>Afficher Aide</string>
    </property>
   </action>
  </widget>

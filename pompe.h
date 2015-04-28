@@ -2,6 +2,7 @@
 #define POMPE_H
 using namespace std;
 #include <iostream>
+#include <QPalette>
 
 class Pompe
 {
@@ -19,6 +20,8 @@ public :
 	void arret();
 	
     int getEtat() const;
+    bool isMarche();
+    QPalette getCouleur();
 
 	
 	~Pompe();

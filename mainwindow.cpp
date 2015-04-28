@@ -35,11 +35,33 @@ void MainWindow::addfenetre(fenetrePilote *f1)
     this->f1 = f1;
 }
 
-void MainWindow::updateFenetre()
+void MainWindow::updateFenetre() // A tester
 {
     updateReservoir();
     updatePompe();
     updateVanne();
+    updateMoteur(); // fais l'update du moteur et des diodes
+
+}
+
+void MainWindow::updateMoteur()
+{
+
+    this->ui->M11->setPixmap(this->a->getCouleurAlimMoteur(0,0));
+    this->ui->M12->setPixmap(this->a->getCouleurAlimMoteur(0,1));
+    this->ui->M13->setPixmap(this->a->getCouleurAlimMoteur(0,2));
+
+    this->ui->M21->setPixmap(this->a->getCouleurAlimMoteur(1,0));
+    this->ui->M22->setPixmap(this->a->getCouleurAlimMoteur(1,1));
+    this->ui->M23->setPixmap(this->a->getCouleurAlimMoteur(1,2));
+
+    this->ui->M31->setPixmap(this->a->getCouleurAlimMoteur(2,0));
+    this->ui->M32->setPixmap(this->a->getCouleurAlimMoteur(2,1));
+    this->ui->M33->setPixmap(this->a->getCouleurAlimMoteur(2,2));
+
+    this->ui->F7->setPalette(this->a->isAlimente(0));
+    this->ui->F8->setPalette(this->a->isAlimente(1));
+    this->ui->F9->setPalette(this->a->isAlimente(2));
 
 }
 
@@ -54,14 +76,15 @@ void MainWindow::updateVanne()
 
 void MainWindow::updatePompe()
 {
+
     this->ui->P11->setEnabled(this->a->R[1].getPompe1().getEtat());
     this->ui->P12->setEnabled(this->a->R[1].getPompe2().getEtat());
 
     this->ui->P21->setEnabled(this->a->R[2].getPompe1().getEtat());
     this->ui->P22->setEnabled(this->a->R[2].getPompe2().getEtat());
 
-    this->ui->P31->setEnabled(this->a->R[2].getPompe1().getEtat());
-    this->ui->P32->setEnabled(this->a->R[2].getPompe2().getEtat());
+    this->ui->P31->setEnabled(this->a->R[3].getPompe1().getEtat());
+    this->ui->P32->setEnabled(this->a->R[3].getPompe2().getEtat());
 }
 
 void MainWindow::updateReservoir()
@@ -85,11 +108,13 @@ void MainWindow::closeEvent(QCloseEvent *)
 void MainWindow::on_actionLancer_Simulation_triggered()
 {
     this->ui->centralwidget->setEnabled(true);
+    this->f1->centralWidget()->setEnabled(true);
 }
 
 void MainWindow::on_actionStopper_simulation_triggered()
 {
     this->ui->centralwidget->setEnabled(false);
+    this->f1->centralWidget()->setEnabled(false);
 }
 
 void MainWindow::on_actionR_initialiser_Simulation_triggered()
@@ -97,6 +122,18 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
     this->a->reset();
     this->updateFenetre();
 }
+
+void MainWindow::on_actionChanger_Utilisateur_triggered()
+{
+
+}
+
+void MainWindow::on_actionAfficher_Aide_triggered()
+{
+    Aide* fenetre = new Aide(this);
+    fenetre->show();
+}
+
 
 void MainWindow::panneP11()
 {
@@ -135,7 +172,3 @@ void MainWindow::vidangeR2()
 void MainWindow::vidangeR3()
 {
 }
-
-
-
-

@@ -4,6 +4,7 @@
 using namespace std;
 #include <iostream>
 #include <QPixmap>
+#include <QPalette>
 
 class Vanne
 {
@@ -21,6 +22,7 @@ public :
 
 	bool getOuvert();
     QPixmap getpixmap();
+    QPalette getCouleur();
 	
     void toString();
 	

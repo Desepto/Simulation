@@ -19,9 +19,10 @@ public:
     explicit fenetrePilote(Avion* a, QWidget *parent = 0);
     ~fenetrePilote();
     void addfenetre(MainWindow* f1);
+    void updateFenetre();
 
 public slots:
-    //V12/V23/P12/P22/P32/V21/V31/V32
+
     void closeEvent(QCloseEvent *);
     void modifV12();
     void modifV23();
