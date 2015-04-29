@@ -33,4 +33,5 @@ RESOURCES += \
 
 OTHER_FILES += \
     ../Simulation-build-desktop-Qt_4_8_1_dans_le_PATH__Syst_me__Release/Simulation \
-    TO_DO-LIST.txt
+    TO_DO-LIST.txt \
+    opheAFaire.txt

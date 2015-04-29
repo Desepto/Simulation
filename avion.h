@@ -8,7 +8,7 @@
 
 class Avion
 {
-private:
+public:
     Reservoir R[3];
     Vanne V[5];
     int moteur[3][3]; // 1ere dimension : numéro du moteur

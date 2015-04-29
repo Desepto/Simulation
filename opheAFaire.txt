@@ -1,0 +1,194 @@
+Voilà ce que tu as à faire pour moi :
+
+Dans la classe avion (détail plus bas) :
+
+- Une fonction qui voit si le pilote PEUT faire en sorte que son avion fonctione bien
+- Une fonction qui regarde si une action du pilote est nécessaire
+
+
+--------------------------------------------------------------------------------
+
+Pour gérer les notes à mettre :
+On met un int comme objet de la classe qu'on init à 0.
+Quand on lance le chrono on lui affecte le nombre de secondes écoulées depuis chez plus quelle date, en gros on récupère le temps actuel
+Quand on arrête le chrono on récupère le temps et on fait une soustraction pour avoir le temps écoulé entre les deux
+On a un autre int qui est l'addition du temps de tous les chrono
+Et un dernier qui est le nombre de fois que les chrono ont été lancés
+
+Pour sauvegarder le score : requete sql ou on ajoute (tous les temps / le nombre de fois le chrono a été lancé)
+Si on a des temps strictement inférieurs à 2 secondes on prend pas en compte
+
+Pour les notes :
+< 3 secondes : 10/10
+< 4 secondes : 9/10
+...
+> 12 secondes 0/10
+
+--------------------------------------------------------------------------------
+
+Pour les slots de "mainwindow.ui" :
+
+Faire les modifications que demandent le clic (sur l'avion) (désactiver une pompe, un moteur..)
+Si l'action effectuée demande une action du pilote
+    Si il est possible au pilote de résoudre le problème
+        Lancer le compteur si il n'est pas lancé
+Sinon si le compteur est lancé
+    Arrêter le compteur
+Faire l'update graphique des DEUX fenetres (updateFenetre())
+
+------------------------------------------------------------------------------
+
+Pour les slots de "fenetrePilote"
+
+Effectuer les modifications que demandent le clic (sur l'avion)
+Si aucune action du pilote n'est nécessaire
+    Si le compteur était lancé
+        Arrêt du compteur
+Sinon
+    Si le compteur n'était pas lancé on le lance
+Update graphique
+
+-------------------------------------------------------------------------------
+
+L'avion n'est pas dépannable si :
+
+Moins de 3 pompes sont fonctionnelles et peuvent disposer de carburant
+
+Une pompe est considérée comme fonctionnelle si :
+* Elle n'est pas en panne ET
+* Son réservoir OU celui/ceux d'à coté est/sont rempli(s)
+
+--------------------------------------------------------------------------------
+
+Une action du pilote est nécessaire si :
+
+Un moteur n'est pas alimenté par EXACTEMENT 1 réservoir
+Si plus de 3 pompes dont le réservoir dispose de carburant sont allumées (note : on peut mettre juste "si + de 3 pompes sont allumées ..." si c'est plus simple)
+BONUS : (pas indispensable mais pas loin je trouve)
+Si les vannes V12 et V23 sont ouvertes sans réservoirs vide
+Si les vannes V21 V31 V32 sont ouvertes alors que les pompes secondaires qui peuvent les utiliser ne sont pas en marche
+
+--------------------------------------------------------------------------------
+
+Note : J'ai peut-être oublié des trucs dans ce qu'il va suivre donc relis bien
+
+--------------------------------------------------------------------------------
+
+Actions à effectuer si un réservoir est vidé :
+
+Fonction qui prend en paramètre le numéro du réservoir
+
+Modifier le réservoir comme quoi il a été vidangé (vidange = true)
+Si la vanne qui le relie à/aux autre(s) réservoir(s) est ouverte et qu'il(s) a/ont du carburant
+    Ne rien faire
+Sinon
+    Si la pompe principale est active dans le tableau moteur de la classe avion mettre à 0 la bonne case
+    Pareil pour la pompe secondaire
+    Si le(s) réservoir(s) d'à coté a/ont déjà été(s) vidangé(s) (vidange = true) et que les vannes correspondantes ont pas été ouvertes // en gros que c'est ce réservoir qui donnait le carburant quoi
+        appeler la fonction sur le réservoir
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si un réservoir est rempli :
+
+Fonction qui prend en paramètre le numéro du réservoir :
+
+Modifier le réservoir comme quoi il est rempli
+Si c'est le réservoir 2
+    Si le réservoir d'à coté est vide et que la vanne est ouverte
+        appeler la fonction comme quoi on l'a rempli
+Si sa pompe principale est en marche
+    Appeler la fonction comem quoi on l'a mise en marche
+Si sa pompe2 est en marche
+    appeler la fonction comme quoi on l'a mise en marche
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si une pompe principale est éteinte/mise en panne :
+
+Fonction qui prend en paramère le numéro du réservoir
+
+Modifier la pompe comme étant en panne
+Si la pompe était active
+    Retirer dans le tableau moteur de avion le fait que ce réservoir alimente le moteur correspondant (réservoir 1 ==> moteur 1)
+Note : Une pompe principale alimente TOUJOURS le moteur qui a le meme nombre que le reservoir qui contient cette pompe
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si une pompe principale est mise en marche :
+
+Fonction qui prend en paramètre le numéro du réservoir
+
+Modifier le tableau moteur d'avion. modifier 0 -> 1 dans la bonne case
+Note : cette pompe alimente toujours son moteur qui a le meme nombre que son reservoir
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si une pompe secondaire est éteinte :
+
+Fonction qui prend en paramètre le numéro du réservoir
+
+Modifier la pompe comme étant en panne
+Si la pompe principale est déjà éteinte
+    Si cette pompe était active
+        Passer la case du tableau moteur correspondante à 0 (celle du moteur avec le même numéro que le réservoir)
+Sinon
+    Si la pompe était active
+        Passer la case du tableau moteur correspondant au moteur qu'elle alimentait à 0 (regarder les vannes)
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si un pompe secondaire est allumée :
+
+Fonction qui prend en parametre le numéro du réservoir
+
+Si la pompe principale est éteinte :
+    Passer la case du tableau moteur correspondante à 1 (celle du moteur avec le même numéro que le réservoir)
+Sinon
+    Si y a une vanne d'ouverte
+    Passer la case du tableau moteur correspondante à 0
+
+----------------------------------------------------------------------------------
+
+Actions à effectuer si une vanne de réservoir est ouverte (ne laisse plus passer le carburant)
+
+Fonction qui prend en paramètre le numéro de la vanne (0 pour la première et 1 pour la seconde ou les numéros que tu veux du moment que tu t'y retrouves)
+
+Si l'un des deux réservoir était le 1 ou le 3 et qu'il était vidangé
+    appeler la fonction de vidange sur le réservoir qu'il faut
+Si l'un des deux réservoir était le 2 et qu'il était vidangé ET que la vanne d'à coté est fermée ET que le réservoir de l'autre coté a du carburant
+    appeler la fonction de vidange sur le réservoir qu'il faut
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si une vanne de réservoir est ouverte (laisse passer le carburant)
+
+Fonction qui prend en paramètre la même chose qu'au dessus
+
+Si un des deux réservoir est rempli et l'autre vide
+    Mettre à jour qu'il est rempli son objet
+    appeler la fonction comme quoi on a rempli le réservoir
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si une vanne s'ouvre (le carburant ne passe pas)
+
+Fonction qui prend en paramètre 0/1/2 en fonction de quelle vanne c'est (après c'est comme au dessus tu fais ce que tu veux)
+
+Si une pompe secondaire qui utilise cette vanne est activée
+    Passer à 0 la bonne case du tableau moteur de avion
+
+---------------------------------------------------------------------------------
+
+Actions à effectuer si on ferme une vanne
+
+Fonction qui prend en paramètre comme au dessus
+
+Si une pompe secondaire qui utilise cette vanne est activée
+    Passer à 1 la bonne case du tableau moteur de avion
+
+----------------------------------------------------------------------------------
+
+
+
+

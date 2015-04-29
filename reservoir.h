@@ -9,6 +9,7 @@ class Reservoir
 {
 private :
 	bool rempli;
+    bool vidange;
     Pompe p1;
     Pompe p2;
 	
@@ -17,10 +18,11 @@ public :
     Reservoir(bool remplissage);
 
     friend ostream & operator << (ostream& os, Reservoir r);
-    void vidange();
+
+    void vidanger();
     bool getRempli();
+    bool getVidange();
     QPalette getCouleur();
-	
     Pompe getPompe1();
     Pompe getPompe2();
 

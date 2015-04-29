@@ -57,6 +57,7 @@ private:
     Avion* a;
     QString nom;
     fenetrePilote* f1;
+    int chrono, tempsTotalEcoule, nombreDeChrono;
 };
 
 #endif // MAINWINDOW_H

@@ -8,11 +8,13 @@ using namespace std;
 Reservoir :: Reservoir() : p1(1), p2(0)
 {
     this->rempli = false;
+    this->vidange = false;
 }
 
 Reservoir :: Reservoir(bool remplissage) : p1(1), p2(0)
 {
 	this->rempli = remplissage;
+    this->vidange = false;
 }
 
 
@@ -29,14 +31,20 @@ ostream & operator << (ostream& os, Reservoir r)
 // Vidange et remplir sont des setteurs : Plus clair mais reviens à 
 //avoir la variable en public
 
-void Reservoir :: vidange()
+void Reservoir :: vidanger()
 {
 	this->rempli = false;
+    this->vidange = true;
 }
 
 bool Reservoir :: getRempli()
 {
     return this->rempli;
+}
+
+bool Reservoir :: getVidange()
+{
+    return this->vidange;
 }
 
 QPalette Reservoir::getCouleur()

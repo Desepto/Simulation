@@ -8,6 +8,9 @@ MainWindow::MainWindow(Avion* a, QString nom, QWidget *parent) :
     ui->setupUi(this);
     this->a = a;
     this->nom = nom;
+    this->chrono = 0;
+    this->tempsTotalEcoule = 0;
+    this->nombreDeChrono = 0;
 
     connect(ui->P11, SIGNAL(clicked()), this, SLOT(panneP11()));
     connect(ui->P12, SIGNAL(clicked()), this, SLOT(panneP12()));
