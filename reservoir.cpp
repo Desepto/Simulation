@@ -77,6 +77,6 @@ void Reservoir::reset()
 {
     this->rempli = true;
     this->p1.marche();
-    this->p2.marche();
+    this->p2.arret();
 }
 
