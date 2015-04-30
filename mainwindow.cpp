@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(Avion* a, QString nom, QWidget *parent) :
+MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -11,6 +11,7 @@ MainWindow::MainWindow(Avion* a, QString nom, QWidget *parent) :
     this->chrono = 0;
     this->tempsTotalEcoule = 0;
     this->nombreDeChrono = 0;
+    this->BDD = BDD;
 
     connect(ui->P11, SIGNAL(clicked()), this, SLOT(panneP11()));
     connect(ui->P12, SIGNAL(clicked()), this, SLOT(panneP12()));
@@ -128,13 +129,31 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
 
 void MainWindow::on_actionChanger_Utilisateur_triggered()
 {
-
+    Identification* fenetre = new Identification(this->a, this->BDD, this);
+    fenetre->show();
 }
 
 void MainWindow::on_actionAfficher_Aide_triggered()
 {
     Aide* fenetre = new Aide(this);
     fenetre->show();
+}
+
+void MainWindow::on_actionSupprimer_historique_triggered()
+{
+    QSqlQuery rqt;
+    QString usrId;
+
+    qDebug() << this->nom;
+    //qDebug() << rqt.next();
+    if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
+    {
+        rqt.next();
+        usrId.setNum(rqt.value(0).toInt(), 10);
+
+        qDebug() << usrId;
+    }
+    rqt.exec("DELETE FROM Score Where IdUser='" + usrId + "'");
 }
 
 

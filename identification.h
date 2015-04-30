@@ -16,7 +16,7 @@ class Identification : public QDialog
     Q_OBJECT
     
 public:
-    explicit Identification(Avion *a,QWidget *parent = 0);
+    explicit Identification(Avion *a, QSqlDatabase BDD, QWidget *parent = 0);
     ~Identification();
     
 private slots:
@@ -28,6 +28,9 @@ private:
     Ui::Identification *ui;
     Avion *a;
     QSqlDatabase BDD;
+    QWidget *parent;
 };
+
+
 
 #endif // IDENTIFICATION_H

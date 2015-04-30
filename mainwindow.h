@@ -5,6 +5,7 @@
 #include "avion.h"
 #include "fenetrepilote.h"
 #include "aide.h"
+#include "identification.h"
 
 class fenetrePilote;
 
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(Avion *a, QString nom, QWidget *parent = 0);
+    explicit MainWindow(Avion *a, QString nom, QSqlDatabase BDD, QWidget *parent = 0);
     ~MainWindow();
     void addfenetre(fenetrePilote* f1);
     void updateFenetre();
@@ -52,13 +53,18 @@ private slots:
 
     void on_actionAfficher_Aide_triggered();
 
+    void on_actionSupprimer_historique_triggered();
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
     QString nom;
     fenetrePilote* f1;
     int chrono, tempsTotalEcoule, nombreDeChrono;
+    QSqlDatabase BDD;
 };
 
 #endif // MAINWINDOW_H
+
+
 

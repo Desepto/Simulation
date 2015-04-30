@@ -4,31 +4,35 @@ using namespace std;
 #include <iostream>
 #include <QMessageBox>
 
-Identification::Identification(Avion *a, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Identification)
+Identification::Identification(Avion *a, QSqlDatabase BDD, QWidget *parent) :
+    QDialog(parent), ui(new Ui::Identification)
 {
+    this->parent = parent;
+    this->BDD = BDD;
     ui->setupUi(this);
     //Chemin BDD
     QString path = QCoreApplication::applicationDirPath();
     path += "/Simulation.sqlite";
+
+
+    if(this->parent == 0)
+    { printf("bite\n");
     //init BDD
-    BDD = QSqlDatabase::addDatabase("QSQLITE");
-    BDD.setDatabaseName(path);
     QFileInfo verifier_BDD(path);
 
-    if(!verifier_BDD.isFile())
-    {
-        QMessageBox::warning(this, "Warning", "Base de donnée inexistante");
-        this->close();
-    }
-    else
-    {
-        if(BDD.open()){}
+        if(!verifier_BDD.isFile())
+        {
+            QMessageBox::warning(this, "Warning", "Base de donnée inexistante");
+            this->close();
+        }
         else
         {
-            QMessageBox::warning(this, "Warning", "Base de donnée non chargée");
-            this->close();
+            if(BDD.open()){}
+            else
+            {
+                QMessageBox::warning(this, "Warning", "Base de donnée non chargée");
+                this->close();
+            }
         }
     }
     this->a = a;
@@ -43,7 +47,7 @@ Identification::~Identification()
 
 void Identification::on_validation_accepted()
 {
-
+    printf("bite 2\n");
     bool etapeSuivante = false;
     //Inscription
     if(ui->inscription->isChecked())
@@ -88,7 +92,7 @@ void Identification::on_validation_accepted()
     }
     if(etapeSuivante)
     {
-        MainWindow* fenetre1 = new MainWindow(this->a, ui->Nom->text());
+        MainWindow* fenetre1 = new MainWindow(this->a, ui->Nom->text(), this->BDD);
         fenetrePilote* fenetre2 = new fenetrePilote(this->a);
         fenetre1->addfenetre(fenetre2);
         fenetre2->addfenetre(fenetre1);
@@ -96,7 +100,12 @@ void Identification::on_validation_accepted()
         fenetre2->show();
 
         this->close();
+        if(this->parent != 0)
+            this->parent->close();
     }
+
+
+
 }
 
 void Identification::on_validation_rejected()
