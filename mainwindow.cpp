@@ -145,7 +145,6 @@ void MainWindow::on_actionSupprimer_historique_triggered()
     QString usrId;
 
     qDebug() << this->nom;
-    //qDebug() << rqt.next();
     if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
     {
         rqt.next();
@@ -153,7 +152,9 @@ void MainWindow::on_actionSupprimer_historique_triggered()
 
         qDebug() << usrId;
     }
-    rqt.exec("DELETE FROM Score Where IdUser='" + usrId + "'");
+    if(rqt.exec("DELETE FROM Score Where IdUser='" + usrId + "'"))
+        QMessageBox::warning(this, "Reussite !", "Suppression effectuee !");
+
 }
 
 

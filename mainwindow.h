@@ -6,6 +6,7 @@
 #include "fenetrepilote.h"
 #include "aide.h"
 #include "identification.h"
+#include <QMessageBox>
 
 class fenetrePilote;
 
