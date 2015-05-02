@@ -42,6 +42,11 @@ bool Reservoir :: getRempli()
     return this->rempli;
 }
 
+void Reservoir :: setRempli(bool rempli)
+{
+    this->rempli = rempli;
+}
+
 bool Reservoir :: getVidange()
 {
     return this->vidange;
@@ -77,6 +82,6 @@ void Reservoir::reset()
 {
     this->rempli = true;
     this->p1.marche();
-    this->p2.marche();
+    this->p2.arret();
 }
 

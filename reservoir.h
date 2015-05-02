@@ -21,6 +21,7 @@ public :
 
     void vidanger();
     bool getRempli();
+    void setRempli(bool rempli);
     bool getVidange();
     QPalette getCouleur();
     Pompe getPompe1();
