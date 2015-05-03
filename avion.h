@@ -8,7 +8,7 @@
 
 class Avion
 {
-public:
+private:
     Reservoir R[3];
     Vanne V[5];
     int moteur[3][3]; // 1ere dimension : numéro du moteur
@@ -21,9 +21,17 @@ public:
     void reset();
     QPixmap getCouleurAlimMoteur(int i, int j);
     QPalette isAlimente(int i);
+    Reservoir getReservoir(int i);
+    Vanne getVanne(int i);
+    int getMoteur(int i, int j);
+    void setMoteur(int i, int j, int alimente);
 
     friend class MainWindow;
     friend class fenetrePilote;
+
+    int nbReservoirVidange();
+    bool peutFonctionner();
+    bool actionNecessaire();
 
 };
 

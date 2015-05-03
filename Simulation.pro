@@ -1,3 +1,6 @@
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT *= widgets
+}
 QT += sql
 
 HEADERS += \
@@ -24,8 +27,11 @@ SOURCES += \
 
 FORMS += \
     mainwindow.ui \
+    mainWindow.ui \
     fenetrepilote.ui \
     identification.ui \
+    piloteWindow.ui \
+    demandeMdp.ui \
     aide.ui
 
 RESOURCES += \

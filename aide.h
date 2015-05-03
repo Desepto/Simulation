@@ -1,7 +1,7 @@
 #ifndef AIDE_H
 #define AIDE_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 
 namespace Ui {
 class Aide;

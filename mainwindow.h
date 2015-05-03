@@ -1,12 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "avion.h"
 #include "fenetrepilote.h"
 #include "aide.h"
 #include "identification.h"
-#include <QMessageBox>
+#include <time.h>
+#include <QtWidgets/QMessageBox>
 
 class fenetrePilote;
 
@@ -27,6 +28,13 @@ public:
     void updatePompe();
     void updateVanne();
     void updateMoteur();
+
+    time_t getChrono();
+    void demarrerChrono();
+    void setChrono(int);
+    int getNombreDeChrono();
+    int getTempsTotalEcoule();
+    void setTempsTotalEcoule (int);
 
 public slots:
     void closeEvent(QCloseEvent *);
@@ -61,7 +69,8 @@ private:
     Avion* a;
     QString nom;
     fenetrePilote* f1;
-    int chrono, tempsTotalEcoule, nombreDeChrono;
+    time_t chrono;
+    int tempsTotalEcoule, nombreDeChrono;
     QSqlDatabase BDD;
 };
 

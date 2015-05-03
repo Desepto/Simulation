@@ -1,7 +1,7 @@
 #ifndef FENETREPILOTE_H
 #define FENETREPILOTE_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "avion.h"
 #include "mainwindow.h"
 
@@ -24,11 +24,11 @@ public:
 public slots:
 
     void closeEvent(QCloseEvent *);
+    void modifVT12();
+    void modifVT23();
     void modifV12();
+    void modifV13();
     void modifV23();
-    void modifV21();
-    void modifV31();
-    void modifV32();
     void modifP12();
     void modifP22();
     void modifP32();

@@ -1,7 +1,7 @@
 #ifndef IDENTIFICATION_H
 #define IDENTIFICATION_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include <QtSql>
 #include <QFileInfo>
 #include "mainwindow.h"
