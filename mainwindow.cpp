@@ -25,10 +25,7 @@ MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent)
     connect(ui->R3, SIGNAL(clicked()), this, SLOT(vidangeR3()));
 
     this->move(0, 50);
-
 }
-
-
 
 MainWindow::~MainWindow()
 {
@@ -127,6 +124,46 @@ void MainWindow::updateReservoir()
     this->ui->F3->setPalette(this->a->R[2].getCouleur());
 }
 
+void MainWindow::saveScore()
+{
+    qDebug() << "Tps total écoulé" << this->getTempsTotalEcoule() << "nombre de chronos" << this->getNombreDeChrono() << endl;
+    int score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
+    int stock = 0;
+    qDebug() << "Le score est à : " << score << endl;
+
+    if(score <= 3)
+    {
+        QMessageBox::information(this,"Score", "Votre score est de 10/10 !");
+        stock = 10;
+    }
+    else if (score > 0)
+    {
+        QString str("Votre score est de ");
+        str += 13 - score;
+        str += "/10 !";
+        QMessageBox::information(this,"Score", str);
+        stock = 13 - score;
+    }
+    else
+    {
+        QMessageBox::information(this,"Score", "Votre score est de 0/10 !");
+        stock = 0;
+    }
+
+    QSqlQuery rqt;
+    QString usrId;
+    if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
+    {
+        rqt.next();
+        usrId.setNum(rqt.value(0).toInt(), 10);
+
+        qDebug() << usrId;
+    }
+    QString Sstock;
+    Sstock.setNum(stock);
+    rqt.exec("INSERT INTO Score (Score, IdUser) VALUES('"+ Sstock +"', '"+ usrId +"')");
+}
+
 time_t MainWindow :: getChrono(){
     return chrono;
 }
@@ -156,6 +193,7 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     this->f1->close();
     this->close();
+    saveScore();
 }
 
 void MainWindow::on_actionLancer_Simulation_triggered()
@@ -174,17 +212,19 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
 {
     this->a->reset();
     this->updateFenetre();
+    saveScore();
 }
 
 void MainWindow::on_actionChanger_Utilisateur_triggered()
 {
+    saveScore();
     Identification* fenetre = new Identification(this->a, this->BDD, this);
     fenetre->show();
 }
 
 void MainWindow::on_actionAfficher_Aide_triggered()
 {
-    Aide* fenetre = new Aide(this);
+    afficherTexte* fenetre = new afficherTexte(1, this->BDD,this->nom, this);
     fenetre->show();
 }
 
@@ -206,6 +246,11 @@ void MainWindow::on_actionSupprimer_historique_triggered()
 
 }
 
+void MainWindow::on_actionAfficher_historique_triggered()
+{
+    afficherTexte* fenetre = new afficherTexte(2, this->BDD,this->nom, this);
+    fenetre->show();
+}
 
 void MainWindow::panneP11()
 {

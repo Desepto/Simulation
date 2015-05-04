@@ -12,7 +12,7 @@ HEADERS += \
     mainwindow.h \
     fenetrepilote.h \
     identification.h \
-    aide.h
+    affichertexte.h
 
 SOURCES += \
     vanne.cpp \
@@ -23,14 +23,14 @@ SOURCES += \
     mainwindow.cpp \
     fenetrepilote.cpp \
     identification.cpp \
-    aide.cpp
+    affichertexte.cpp
 
 FORMS += \
     mainwindow.ui \
     fenetrepilote.ui \
     identification.ui \
     demandeMdp.ui \
-    aide.ui
+    affichertexte.ui
 
 RESOURCES += \
     images.qrc

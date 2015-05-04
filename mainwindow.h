@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "avion.h"
 #include "fenetrepilote.h"
-#include "aide.h"
+#include "affichertexte.h"
 #include "identification.h"
 #include <time.h>
 #include <QMessageBox>
@@ -35,6 +35,7 @@ public:
     int getNombreDeChrono();
     int getTempsTotalEcoule();
     void setTempsTotalEcoule (int);
+    void saveScore();
 
 public slots:
     void closeEvent(QCloseEvent *);
@@ -64,6 +65,8 @@ private slots:
 
     void on_actionSupprimer_historique_triggered();
 
+    void on_actionAfficher_historique_triggered();
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
@@ -75,6 +78,3 @@ private:
 };
 
 #endif // MAINWINDOW_H
-
-
-

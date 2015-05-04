@@ -58,54 +58,10 @@ void fenetrePilote::addfenetre(MainWindow *f1)
     this->f1 = f1;
 }
 
+
+
 void fenetrePilote::closeEvent(QCloseEvent *)
 {
-    int score = f1->getTempsTotalEcoule()/f1->getNombreDeChrono();
-    if(score <= 3)
-        cout << "Bravo, votre score est de 10/10!" << endl;
-    else{
-        switch (score) {
-            case 4:
-                cout << "Votre score est de 9/10!" << endl;
-                break;
-
-            case 5:
-                cout << "Votre score est de 8/10!" << endl;
-                break;
-
-            case 6:
-                cout << "Votre score est de 7/10!" << endl;
-                break;
-
-            case 7:
-                cout << "Votre score est de 6/10!" << endl;
-                break;
-
-            case 8:
-                cout << "Votre score est de 5/10!" << endl;
-                break;
-
-            case 9:
-                cout << "Votre score est de 4/10!" << endl;
-                break;
-
-            case 10:
-                cout << "Votre score est de 3/10!" << endl;
-                break;
-
-            case 11:
-                cout << "Votre score est de 2/10!" << endl;
-                break;
-
-            case 12:
-                cout << "Votre score est de 1/10!" << endl;
-                break;
-
-            default:
-                cout << "Votre score est de 0/10!" << endl;
-                break;
-        }
-    }
     this->f1->close();
     this->close();
 }

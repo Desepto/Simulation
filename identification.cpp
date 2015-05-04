@@ -37,7 +37,6 @@ Identification::Identification(Avion *a, QSqlDatabase BDD, QWidget *parent) :
         }
     }
     this->a = a;
-
 }
 
 

@@ -2,17 +2,32 @@ Liste des bugs trouvés :
 
 Les vannes ne se mettent pas à jour
 Probablement un pb de au niveau des pompes de tank
+La P32 ne s'allume pas SAUF si tu fermes la V32
+Il semblerait que le score soit toujours de 10/10
+    Le temps total écoulé est de 0
+    J'ai l'impression que y a trop de chronos de lancés (par ex si le chrono est déjà lancé tu as pas à le relancer)
 
 
 
+A faire :
+Affichage historique
+Les exercices
 
 
 
-Améliorations à faire :
-Changer le qui affiche le score dans fenetrepilote(message sympa + faire un x - y)
-
+Améliorations possible :
+Si moins de 3 pannes résolues : pas de save
+Si trop rapide : panne résolue non sauvegardée (et pas comptée comme une panne)
 
 
 
 Corrigés
 Quand on reset : ça met toutes les pompes 2 en mode cassées et le reservoir 3 en mode éteint
+
+
+FAIT :
+Changer le qui affiche le score dans fenetrepilote(message sympa + faire un x - y)
+A faire :
+Changer user
+Quitter
+Reset
