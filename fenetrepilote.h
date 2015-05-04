@@ -1,7 +1,7 @@
 #ifndef FENETREPILOTE_H
 #define FENETREPILOTE_H
 
-#include <QtWidgets/QMainWindow>
+#include <QMainWindow>
 #include "avion.h"
 #include "mainwindow.h"
 
@@ -19,7 +19,7 @@ public:
     explicit fenetrePilote(Avion* a, QWidget *parent = 0);
     ~fenetrePilote();
     void addfenetre(MainWindow* f1);
-    void updateFenetre();
+    void updateFenetre(bool premierAppel = true);
 
 public slots:
 

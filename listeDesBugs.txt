@@ -1,0 +1,18 @@
+Liste des bugs trouvés :
+
+Les vannes ne se mettent pas à jour
+Probablement un pb de au niveau des pompes de tank
+
+
+
+
+
+
+Améliorations à faire :
+Changer le qui affiche le score dans fenetrepilote(message sympa + faire un x - y)
+
+
+
+
+Corrigés
+Quand on reset : ça met toutes les pompes 2 en mode cassées et le reservoir 3 en mode éteint

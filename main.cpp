@@ -8,8 +8,8 @@
 #include "fenetrepilote.h"
 #include "avion.h"
 #include "identification.h"
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QWidget>
+#include <QApplication>
+#include <QWidget>
 
 
 using namespace std;
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     QSqlDatabase BDD;
     QString path = QCoreApplication::applicationDirPath();
-    path += "./Simulation.sqlite";
+    path += "/Simulation.sqlite";
     BDD = QSqlDatabase::addDatabase("QSQLITE");
     BDD.setDatabaseName(path);
 

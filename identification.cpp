@@ -12,11 +12,12 @@ Identification::Identification(Avion *a, QSqlDatabase BDD, QWidget *parent) :
     ui->setupUi(this);
     //Chemin BDD
     QString path = QCoreApplication::applicationDirPath();
+    qDebug() << path;
     path += "/Simulation.sqlite";
-
+    qDebug() << path;
 
     if(this->parent == 0)
-    { printf("bite\n");
+    {
     //init BDD
     QFileInfo verifier_BDD(path);
 

@@ -56,8 +56,10 @@ QPalette Reservoir::getCouleur()
 {
     if(this->rempli)
         return Qt::green;
-    else
+    else if(this->vidange)
         return Qt::blue;
+    else
+        return Qt::red;
 }
 
 Pompe Reservoir::getPompe1()
@@ -81,7 +83,8 @@ Reservoir :: ~Reservoir()
 void Reservoir::reset()
 {
     this->rempli = true;
+    this->vidange = false;
     this->p1.marche();
-    this->p2.arret();
+    this->p2.resetp2();
 }
 

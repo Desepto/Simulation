@@ -1,13 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtWidgets/QMainWindow>
+#include <QMainWindow>
 #include "avion.h"
 #include "fenetrepilote.h"
 #include "aide.h"
 #include "identification.h"
 #include <time.h>
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 
 class fenetrePilote;
 
@@ -23,7 +23,7 @@ public:
     explicit MainWindow(Avion *a, QString nom, QSqlDatabase BDD, QWidget *parent = 0);
     ~MainWindow();
     void addfenetre(fenetrePilote* f1);
-    void updateFenetre();
+    void updateFenetre(bool premierAppel = true);
     void updateReservoir();
     void updatePompe();
     void updateVanne();

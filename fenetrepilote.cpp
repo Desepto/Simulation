@@ -26,7 +26,7 @@ fenetrePilote::~fenetrePilote()
     delete ui;
 }
 
-void fenetrePilote::updateFenetre() // A tester
+void fenetrePilote::updateFenetre(bool premierAppel) // A tester
 {
 
     this->ui->F1->setPalette(this->a->V[0].getCouleur());
@@ -43,7 +43,8 @@ void fenetrePilote::updateFenetre() // A tester
     this->ui->P22->setEnabled(this->a->R[1].getPompe2().isMarche());
     this->ui->P32->setEnabled(this->a->R[2].getPompe2().isMarche());
 
-
+    if(premierAppel)
+        this->f1->updateFenetre(false);
 
 }
 

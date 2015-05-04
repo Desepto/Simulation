@@ -18,6 +18,8 @@ public :
 	void panne();
 	void marche();
 	void arret();
+    void resetp2();
+    int getEnFonction();
 	
     int getEtat() const;
     bool isMarche();

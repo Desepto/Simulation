@@ -27,6 +27,11 @@ void Pompe :: arret()
 		this->etat = 0;
 }
 
+void Pompe::resetp2()
+{
+    this->etat = 0;
+}
+
 void Pompe :: marche()
 {
 	if(this->etat != -1)
@@ -36,6 +41,14 @@ void Pompe :: marche()
 int Pompe :: getEtat() const
 {
     return this->etat;
+}
+
+int Pompe::getEnFonction()
+{
+    if(this->etat == -1)
+        return 0;
+    else
+        return 1;
 }
 
 bool Pompe::isMarche()

@@ -40,12 +40,15 @@ void MainWindow::addfenetre(fenetrePilote *f1)
     this->f1 = f1;
 }
 
-void MainWindow::updateFenetre() // A tester
+void MainWindow::updateFenetre(bool premierAppel) // A tester
 {
     updateReservoir();
     updatePompe();
     updateVanne();
     updateMoteur(); // fais l'update du moteur et des diodes
+
+    if(premierAppel)
+        this->f1->updateFenetre(false);
 
 }
 
@@ -81,27 +84,27 @@ void MainWindow::updateVanne()
 
 void MainWindow::updatePompe()
 {
+    printf("pompe2 = %d\n", this->a->R[0].getPompe2().getEnFonction());
+    this->ui->P11->setEnabled(this->a->R[0].getPompe1().getEnFonction());
+    this->ui->P12->setEnabled(this->a->R[0].getPompe2().getEnFonction());
 
-    this->ui->P11->setEnabled(this->a->R[1].getPompe1().getEtat());
-    this->ui->P12->setEnabled(this->a->R[1].getPompe2().getEtat());
+    this->ui->P21->setEnabled(this->a->R[1].getPompe1().getEnFonction());
+    this->ui->P22->setEnabled(this->a->R[1].getPompe2().getEnFonction());
 
-    this->ui->P21->setEnabled(this->a->R[2].getPompe1().getEtat());
-    this->ui->P22->setEnabled(this->a->R[2].getPompe2().getEtat());
-
-    this->ui->P31->setEnabled(this->a->R[3].getPompe1().getEtat());
-    this->ui->P32->setEnabled(this->a->R[3].getPompe2().getEtat());
+    this->ui->P31->setEnabled(this->a->R[2].getPompe1().getEnFonction());
+    this->ui->P32->setEnabled(this->a->R[2].getPompe2().getEnFonction());
 }
 
 void MainWindow::updateReservoir()
 {
-    this->ui->R1->setEnabled(this->a->R[1].getRempli());
-    this->ui->F1->setPalette(this->a->R[1].getCouleur());
+    this->ui->R1->setEnabled(this->a->R[0].getRempli());
+    this->ui->F1->setPalette(this->a->R[0].getCouleur());
 
-    this->ui->R2->setEnabled(this->a->R[2].getRempli());
-    this->ui->F2->setPalette(this->a->R[2].getCouleur());
+    this->ui->R2->setEnabled(this->a->R[1].getRempli());
+    this->ui->F2->setPalette(this->a->R[1].getCouleur());
 
-    this->ui->R3->setEnabled(this->a->R[3].getRempli());
-    this->ui->F3->setPalette(this->a->R[3].getCouleur());
+    this->ui->R3->setEnabled(this->a->R[2].getRempli());
+    this->ui->F3->setPalette(this->a->R[2].getCouleur());
 }
 
 time_t MainWindow :: getChrono(){
