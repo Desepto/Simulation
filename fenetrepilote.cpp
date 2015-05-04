@@ -43,8 +43,13 @@ void fenetrePilote::updateFenetre(bool premierAppel) // A tester
     this->ui->P22->setEnabled(this->a->R[1].getPompe2().isMarche());
     this->ui->P32->setEnabled(this->a->R[2].getPompe2().isMarche());
 
+    printf("premierAppel %d \n", premierAppel);
+
     if(premierAppel)
+    {
+        printf("test\n");
         this->f1->updateFenetre(false);
+    }
 
 }
 
@@ -107,6 +112,8 @@ void fenetrePilote::closeEvent(QCloseEvent *)
 
 void fenetrePilote::modifVT12()
 {
+    printf("BITE \n");
+
     if(a->getVanne(0).getOuvert())
     {
         a->getVanne(0).fermer();
@@ -115,7 +122,9 @@ void fenetrePilote::modifVT12()
         else if(!a->getReservoir(1).getRempli() && a->getReservoir(0).getRempli() && !a->getReservoir(0).getVidange())
             a->getReservoir(1).setRempli(true);
 
-    }else{
+    }
+    else
+    {
         a->getVanne(0).ouvrir();
         if(a->getReservoir(0).getVidange())
             f1->vidangeR1();

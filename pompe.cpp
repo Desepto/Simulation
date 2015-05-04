@@ -84,12 +84,14 @@ ostream & operator << (ostream & os, Pompe p)
 
 Pompe :: ~Pompe()
 {
+    /*
 	if(this->etat == -1)
 		cout << "Destruction d'une pompe en panne" << endl;
 	else if(this->etat == 0)
 		cout << "Destruction d'une pompe à l'arrêt" << endl;
 	else
 		cout << "Destruction d'une pompe en marche" << endl;
+        */
 }
 
 

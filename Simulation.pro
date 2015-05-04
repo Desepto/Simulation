@@ -27,10 +27,8 @@ SOURCES += \
 
 FORMS += \
     mainwindow.ui \
-    mainWindow.ui \
     fenetrepilote.ui \
     identification.ui \
-    piloteWindow.ui \
     demandeMdp.ui \
     aide.ui
 

@@ -43,17 +43,17 @@ bool Vanne :: getOuvert()
 QPixmap Vanne::getpixmap()
 {
     if(this->ouvert)
-        return QPixmap(":/icones/vert");
-    else
         return QPixmap(":/icones/rouge");
+    else
+        return QPixmap(":/icones/vert");
 }
 
 QPalette Vanne::getCouleur()
 {
     if(this->ouvert)
-        return Qt::green;
-    else
         return Qt::red;
+    else
+        return Qt::green;
 }
 
 Vanne :: ~Vanne()

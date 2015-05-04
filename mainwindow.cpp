@@ -47,6 +47,26 @@ void MainWindow::updateFenetre(bool premierAppel) // A tester
     updateVanne();
     updateMoteur(); // fais l'update du moteur et des diodes
 
+    qDebug("Etat de l'avion :\n");
+    qDebug("Moteur 1 : rempli : %d / vidange : %d", this->a->R[0].getRempli(), this->a->R[0].getVidange());
+    qDebug("Moteur 2 : rempli : %d / vidange : %d", this->a->R[1].getRempli(), this->a->R[1].getVidange());
+    qDebug("Moteur 3 : rempli : %d / vidange : %d", this->a->R[2].getRempli(), this->a->R[2].getVidange());
+    qDebug("Pompe 1.1 : %d / Pompe 1.2 : %d ", this->a->R[0].getPompe1().getEtat(), this->a->R[0].getPompe2().getEtat());
+    qDebug("Pompe 2.1 : %d / Pompe 2.2 : %d ", this->a->R[1].getPompe1().getEtat(), this->a->R[1].getPompe2().getEtat());
+    qDebug("Pompe 3.1 : %d / Pompe 3.2 : %d ", this->a->R[2].getPompe1().getEtat(), this->a->R[2].getPompe2().getEtat());
+    qDebug("Vanne VT12 : %d", this->a->V[0].getOuvert());
+    qDebug("Vanne VT23 : %d", this->a->V[1].getOuvert());
+    qDebug("Vanne V12  : %d", this->a->V[2].getOuvert());
+    qDebug("Vanne V23  : %d", this->a->V[3].getOuvert());
+    qDebug("Vanne V31  : %d", this->a->V[4].getOuvert());
+
+    qDebug();
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++)
+            qDebug("Moteur[%d][%d] = %d", i, j, this->a->moteur[i][j]);
+        qDebug("\n");
+    }
+
     if(premierAppel)
         this->f1->updateFenetre(false);
 
@@ -235,17 +255,17 @@ void MainWindow::panneP11()
 }
 
 void MainWindow::panneP12()
-{
+{ qDebug("Test 1\n");
     if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getRempli())
-    {
+    { qDebug("Test 2\n");
         int moteurAlimente = 0;
         for(int i = 0 ; i < 3 ; i++)
             if(a->getMoteur(0,i) == 1)
                 moteurAlimente = i;
         if(moteurAlimente == 0)
-        {
+        {qDebug("Test 3\n");
             if(a->getReservoir(0).getPompe1().getEtat() != 1)
-            {
+            {qDebug("Test 4\n");
                 a->setMoteur(0,0,0);
                 if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(3).getOuvert() && a->getMoteur(2,1) != 1)
                     a->setMoteur(2,0,1);
@@ -253,18 +273,24 @@ void MainWindow::panneP12()
                     a->setMoteur(1,0,1);
             }
         }else if(moteurAlimente == 1)
-        {
+        {qDebug("Test 5\n");
             a->setMoteur(0,moteurAlimente,0);
             if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(4).getOuvert())
                 a->setMoteur(2,1,1);
-        }else{
+        }else{ qDebug("Test 6\n");
             a->setMoteur(0,moteurAlimente,0);
             if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(4).getOuvert())
                 a->setMoteur(1,2,1);
         }
     }
-    a->getReservoir(0).getPompe2().panne();
+
+   printf("Test 7\n");
+  this->a->R[0].getPompe2().panne();
+   // a->getReservoir(0).getPompe2().panne();
+    qDebug("Valeur pompe : %d", this->a->R[0].getPompe2().getEtat() );
+    qDebug("Test 8\n");
     updateFenetre();
+    qDebug("Test 9\n");
     if(a->actionNecessaire())
         demarrerChrono();
     else if( (int)chrono != 0){
