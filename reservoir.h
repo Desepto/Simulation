@@ -23,9 +23,10 @@ public :
     bool getRempli();
     void setRempli(bool rempli);
     bool getVidange();
+   // void panneP2();
     QPalette getCouleur();
-    Pompe getPompe1();
-    Pompe getPompe2();
+    Pompe& getPompe1();
+    Pompe& getPompe2();
 
     void reset();
 	

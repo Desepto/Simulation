@@ -58,17 +58,17 @@ QPalette Avion::isAlimente(int i)
 
 }
 
-Reservoir Avion :: getReservoir(int i)
+Reservoir &Avion::getReservoir(int i)
 {
     return R[i];
 }
 
-Vanne Avion :: getVanne(int i)
+Vanne &Avion :: getVanne(int i)
 {
     return V[i];
 }
 
-int Avion :: getMoteur(int i, int j)
+int &Avion :: getMoteur(int i, int j)
 {
     return moteur[i][j];
 }

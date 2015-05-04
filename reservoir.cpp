@@ -62,12 +62,12 @@ QPalette Reservoir::getCouleur()
         return Qt::red;
 }
 
-Pompe Reservoir::getPompe1()
+Pompe &Reservoir::getPompe1()
 {
     return this->p1;
 }
 
-Pompe Reservoir::getPompe2()
+Pompe &Reservoir::getPompe2()
 {
     return this->p2;
 }

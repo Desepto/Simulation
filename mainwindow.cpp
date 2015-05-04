@@ -287,6 +287,7 @@ void MainWindow::panneP12()
    printf("Test 7\n");
   this->a->R[0].getPompe2().panne();
    // a->getReservoir(0).getPompe2().panne();
+   //this->a->R[0].panneP2();
     qDebug("Valeur pompe : %d", this->a->R[0].getPompe2().getEtat() );
     qDebug("Test 8\n");
     updateFenetre();
