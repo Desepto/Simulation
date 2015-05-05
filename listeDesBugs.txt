@@ -1,23 +1,23 @@
-Remarque :
+BUGS :
+La fonction de fin ne termine pas la simulation lorsqu'il reste moins de 3 pompes, uniquement quand il n'y a plus de réservoirs
+Quand on utilise les vannes pour envoyer du carburant (les V pas les VT) le bouton change de couleur mais pas le cadre (le tableau moteur est pas mis à jour)
 
-Je crois que le qstring fait un peu de la merde qd il affiche les scores parce que
-si c'est pas 10 ou 0 ca affiche un symbole bizar...
 
-A faire :
-Affichage historique
-Les exercices
-
+A FAIRE :
 quand l'avion ne peut plus fonctionner ca serait ptete bien de spawn une fenetre
 qui l'indique et qui réinitialise non?
+==> on appelle la fonction finSimulation() qui fait pop son score et après il doit reset à la main
 
 Si quand on quitte il y a toujours une action a faire (a->actionNecessaire())
     soit on le note pas, et affiche "Simulation pas fini"
     soit on lui met 0.
+==> Fais comme tu veux, ce qui est le plus simple
 
-
-Améliorations possible :
-Si moins de 3 pannes résolues : pas de save  (pas obligé je pense)
+Si moins de 3 (on peut réduire à 2 voir 1) pannes résolues : pas de save
 Si trop rapide : panne résolue non sauvegardée (et pas comptée comme une panne)
+Améliorations possible :
+
+
 
 
 
@@ -29,3 +29,7 @@ A faire :
 Changer user
 Quitter
 Reset
+Je crois que le qstring fait un peu de la merde qd il affiche les scores parce que
+si c'est pas 10 ou 0 ca affiche un symbole bizar...
+Affichage historique
+Les exercices

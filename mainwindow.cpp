@@ -6,6 +6,7 @@ MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent)
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    this->timer = new QTimer(this);
     ui->setupUi(this);
     this->a = a;
     this->nom = nom;
@@ -13,6 +14,30 @@ MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent)
     this->tempsTotalEcoule = 0;
     this->nombreDeChrono = 0;
     this->BDD = BDD;
+
+    // Initialisation du choix aléatoire de panne
+    //this->ordrePanneAlea = {0,1,2,3,4,5,6,7,8,0};
+    for(int i = 0; i < 9; i++)
+        this->ordrePanneAlea[i] = i;
+    this->ordrePanneAlea[9] = 0;
+    qsrand(time(NULL));
+    int k,l, temp;
+
+    for(int i = 0; i < 30; i++)
+    {
+        k = qrand() % 9;
+        qDebug() << "k = " << k << endl;
+        l = qrand() % 9;
+        qDebug() << "l = " << l << endl;
+        temp = ordrePanneAlea[k];
+        ordrePanneAlea[k] = ordrePanneAlea[l];
+        ordrePanneAlea[l] = temp;
+    }
+    for(int i = 0; i < 9; i++)
+        qDebug() << "tab[" << i << "] =" << ordrePanneAlea[i] << endl;
+    // Fin de l'init de choix aléatoire de panne
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(panneAlea()));
 
     connect(ui->P11, SIGNAL(clicked()), this, SLOT(panneP11()));
     connect(ui->P12, SIGNAL(clicked()), this, SLOT(panneP12()));
@@ -124,10 +149,20 @@ void MainWindow::updateReservoir()
     this->ui->F3->setPalette(this->a->R[2].getCouleur());
 }
 
+void MainWindow::finSimulation()
+{
+    qDebug()<< "bite";
+    if(this->timer->isActive())
+        timer->stop();
+    saveScore();
+}
+
 void MainWindow::saveScore()
 {
     qDebug() << "Tps total écoulé" << this->getTempsTotalEcoule() << "nombre de chronos" << this->getNombreDeChrono() << endl;
-    int score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
+    int score = 0;
+    if(this->getNombreDeChrono() != 0)
+        score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
     int stock = 0;
     qDebug() << "Le score est à : " << score << endl;
 
@@ -136,10 +171,10 @@ void MainWindow::saveScore()
         QMessageBox::information(this,"Score", "Votre score est de 10/10 !");
         stock = 10;
     }
-    else if (score > 0)
+    else if (score < 13)
     {
         QString str("Votre score est de ");
-        str += 13 - score;
+        str += QString::number(13 - score) ;
         str += "/10 !";
         QMessageBox::information(this,"Score", str);
         stock = 13 - score;
@@ -197,7 +232,7 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     this->f1->close();
     this->close();
-    saveScore();
+    finSimulation();
 }
 
 void MainWindow::on_actionLancer_Simulation_triggered()
@@ -210,13 +245,14 @@ void MainWindow::on_actionStopper_simulation_triggered()
 {
     this->ui->centralwidget->setEnabled(false);
     this->f1->centralWidget()->setEnabled(false);
+    this->timer->stop();
 }
 
 void MainWindow::on_actionR_initialiser_Simulation_triggered()
 {
     this->a->reset();
     this->updateFenetre();
-    saveScore();
+    finSimulation();
     this->chrono = 0;
     this->tempsTotalEcoule = 0;
     this->nombreDeChrono = 0;
@@ -224,7 +260,7 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
 
 void MainWindow::on_actionChanger_Utilisateur_triggered()
 {
-    saveScore();
+    finSimulation();
     Identification* fenetre = new Identification(this->a, this->BDD, this);
     fenetre->show();
 }
@@ -257,6 +293,11 @@ void MainWindow::on_actionAfficher_historique_triggered()
 {
     afficherTexte* fenetre = new afficherTexte(2, this->BDD,this->nom, this);
     fenetre->show();
+}
+
+void MainWindow::on_actionPannes_automatiques_triggered()
+{
+    this->timer->start(5000);
 }
 
 void MainWindow::panneP11()
@@ -669,4 +710,103 @@ void MainWindow::vidangeR3()
             decrementerNombreDeChrono();
         chrono = 0;
     }
+}
+
+void MainWindow::panneAlea()
+{
+    bool termine = false;
+    int test;
+
+    for(int i = 0; i < 9; i++)
+        qDebug() << "ordre : " << i << " = " << ordrePanneAlea[i];
+    do
+    {test = ordrePanneAlea[9];
+        qDebug() << "ordre panne alea[9] =" << ordrePanneAlea[9];
+        qDebug() << "la valeur :" << ordrePanneAlea[test];
+        switch(ordrePanneAlea[ordrePanneAlea[9]])
+        {
+            case 0:
+                if(!this->a->R[0].getVidange())
+                {
+                    termine = true;
+                    vidangeR1();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 1:
+                if(!this->a->R[1].getVidange())
+                {
+                    termine = true;
+                    vidangeR2();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 2:
+                if(!this->a->R[2].getVidange())
+                {
+                    termine = true;
+                    vidangeR3();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 3:
+            if(this->a->R[0].getPompe1().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP11();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 4:
+                if(this->a->R[0].getPompe2().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP12();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 5:
+                if(this->a->R[1].getPompe1().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP21();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 6:
+                if(this->a->R[1].getPompe2().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP22();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 7:
+                if(this->a->R[2].getPompe1().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP31();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+            case 8:
+                if(this->a->R[2].getPompe2().getEtat() != -1)
+                {
+                    termine = true;
+                    panneP32();
+                }
+                ordrePanneAlea[9]++;
+
+                break;
+
+        }
+    } while(termine == false);
 }

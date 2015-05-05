@@ -28,6 +28,7 @@ public:
     void updatePompe();
     void updateVanne();
     void updateMoteur();
+    void finSimulation();
 
     time_t getChrono();
     void demarrerChrono();
@@ -52,6 +53,7 @@ public slots:
     void vidangeR2();
     void vidangeR3();
 
+    void panneAlea();
 
 private slots:
     void on_actionLancer_Simulation_triggered();
@@ -68,14 +70,20 @@ private slots:
 
     void on_actionAfficher_historique_triggered();
 
+    void on_actionPannes_automatiques_triggered();
+
 private:
     Ui::MainWindow *ui;
     Avion* a;
     QString nom;
     fenetrePilote* f1;
+    QTimer* timer;
+    int ordrePanneAlea[10];
     time_t chrono;
     int tempsTotalEcoule, nombreDeChrono;
     QSqlDatabase BDD;
 };
 
 #endif // MAINWINDOW_H
+
+

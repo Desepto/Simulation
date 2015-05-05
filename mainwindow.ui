@@ -3428,7 +3428,7 @@
      <x>0</x>
      <y>0</y>
      <width>838</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">
@@ -3438,6 +3438,7 @@
     <addaction name="actionLancer_Simulation"/>
     <addaction name="actionStopper_simulation"/>
     <addaction name="actionR_initialiser_Simulation"/>
+    <addaction name="actionPannes_automatiques"/>
    </widget>
    <widget class="QMenu" name="menuUtilisateur">
     <property name="title">
@@ -3508,6 +3509,11 @@
   <action name="actionAfficher_Aide">
    <property name="text">
     <string>Afficher Aide</string>
+   </property>
+  </action>
+  <action name="actionPannes_automatiques">
+   <property name="text">
+    <string>Pannes automatiques</string>
    </property>
   </action>
  </widget>
