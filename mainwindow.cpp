@@ -73,15 +73,15 @@ void MainWindow::updateMoteur()
 {
 
     this->ui->M11->setPixmap(this->a->getCouleurAlimMoteur(0,0));
-    this->ui->M12->setPixmap(this->a->getCouleurAlimMoteur(0,1));
-    this->ui->M13->setPixmap(this->a->getCouleurAlimMoteur(0,2));
+    this->ui->M12->setPixmap(this->a->getCouleurAlimMoteur(1,0));
+    this->ui->M13->setPixmap(this->a->getCouleurAlimMoteur(2,0));
 
-    this->ui->M21->setPixmap(this->a->getCouleurAlimMoteur(1,0));
+    this->ui->M21->setPixmap(this->a->getCouleurAlimMoteur(0,1));
     this->ui->M22->setPixmap(this->a->getCouleurAlimMoteur(1,1));
-    this->ui->M23->setPixmap(this->a->getCouleurAlimMoteur(1,2));
+    this->ui->M23->setPixmap(this->a->getCouleurAlimMoteur(2,1));
 
-    this->ui->M31->setPixmap(this->a->getCouleurAlimMoteur(2,0));
-    this->ui->M32->setPixmap(this->a->getCouleurAlimMoteur(2,1));
+    this->ui->M31->setPixmap(this->a->getCouleurAlimMoteur(0,2));
+    this->ui->M32->setPixmap(this->a->getCouleurAlimMoteur(1,2));
     this->ui->M33->setPixmap(this->a->getCouleurAlimMoteur(2,2));
 
     this->ui->F7->setPalette(this->a->isAlimente(0));
@@ -92,11 +92,11 @@ void MainWindow::updateMoteur()
 
 void MainWindow::updateVanne()
 {
-    this->ui->V12->setPixmap(this->a->V[0].getpixmap());
-    this->ui->V23->setPixmap(this->a->V[1].getpixmap());
-    this->ui->V21->setPixmap(this->a->V[2].getpixmap());
-    this->ui->V31->setPixmap(this->a->V[3].getpixmap());
-    this->ui->V32->setPixmap(this->a->V[4].getpixmap());
+    this->ui->VT12->setPixmap(this->a->V[0].getpixmap());
+    this->ui->VT23->setPixmap(this->a->V[1].getpixmap());
+    this->ui->V12->setPixmap(this->a->V[2].getpixmap());
+    this->ui->V13->setPixmap(this->a->V[3].getpixmap());
+    this->ui->V23->setPixmap(this->a->V[4].getpixmap());
 }
 
 void MainWindow::updatePompe()
@@ -185,6 +185,10 @@ int MainWindow :: getNombreDeChrono(){
     return nombreDeChrono;
 }
 
+void MainWindow :: decrementerNombreDeChrono(){
+    nombreDeChrono--;
+}
+
 void MainWindow :: setTempsTotalEcoule (int temps){
     tempsTotalEcoule = temps;
 }
@@ -213,6 +217,9 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
     this->a->reset();
     this->updateFenetre();
     saveScore();
+    this->chrono = 0;
+    this->tempsTotalEcoule = 0;
+    this->nombreDeChrono = 0;
 }
 
 void MainWindow::on_actionChanger_Utilisateur_triggered()
@@ -254,46 +261,49 @@ void MainWindow::on_actionAfficher_historique_triggered()
 
 void MainWindow::panneP11()
 {
-    if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getRempli())
+    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
     {
         int i;
         int moteurAlimente = 0;
         for(i = 1 ; i < 3 ; i++)
-            if(a->getMoteur(0,i) == 1)
+            if(a->moteur[0][i] == 1)
                 moteurAlimente = i;
         if(moteurAlimente != 0)
         {
-            a->setMoteur(0,moteurAlimente,0);
+            a->moteur[0][moteurAlimente] = 0;
             switch (moteurAlimente) {
 
                 case 1:
-                    if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(4).getOuvert())
-                        a->setMoteur(2,1,1);
+                    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
+                        a->moteur[2][1] = 1;
                     break;
 
                 case 2:
-                    if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(4).getOuvert())
-                        a->setMoteur(1,2,1);
+                    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert())
+                        a->moteur[1][2] = 1;
                     break;
             }
         }
-    }else if(a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getPompe2().getEtat() != 1)
+    }else if(a->R[0].getPompe1().getEtat() == 1 && a->R[0].getPompe2().getEtat() != 1)
     {
-        a->setMoteur(0,0,0);
-        if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(3).getOuvert() && a->getMoteur(2,1) != 1)
-            a->setMoteur(2,0,1);
-        else if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(2).getOuvert() && a->getMoteur(1,2) != 1)
-            a->setMoteur(1,0,1);
+        a->moteur[0][0] = 0;
+        if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert() && a->moteur[2][1] != 1)
+            a->moteur[2][0] = 1;
+        else if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert() && a->moteur[1][2] != 1)
+            a->moteur[1][0] = 1;
 
     }
-    a->getReservoir(0).getPompe1().panne();
+    a->R[0].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 
@@ -301,315 +311,362 @@ void MainWindow::panneP11()
 
 void MainWindow::panneP12()
 { qDebug("Test 1\n");
-    if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getRempli())
+    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
     { qDebug("Test 2\n");
         int moteurAlimente = 0;
         for(int i = 0 ; i < 3 ; i++)
-            if(a->getMoteur(0,i) == 1)
+            if(a->moteur[0][i] == 1)
                 moteurAlimente = i;
         if(moteurAlimente == 0)
         {qDebug("Test 3\n");
-            if(a->getReservoir(0).getPompe1().getEtat() != 1)
+            if(a->R[0].getPompe1().getEtat() != 1)
             {qDebug("Test 4\n");
-                a->setMoteur(0,0,0);
-                if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(3).getOuvert() && a->getMoteur(2,1) != 1)
-                    a->setMoteur(2,0,1);
-                else if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(2).getOuvert() && a->getMoteur(1,2) != 1)
-                    a->setMoteur(1,0,1);
+                a->moteur[0][0] = 0;
+                if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert() && a->moteur[2][1] != 1)
+                    a->moteur[2][0] = 1;
+                else if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert() && a->moteur[1][2] != 1)
+                    a->moteur[1][0] = 1;
             }
         }else if(moteurAlimente == 1)
         {qDebug("Test 5\n");
-            a->setMoteur(0,moteurAlimente,0);
-            if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(4).getOuvert())
-                a->setMoteur(2,1,1);
+            a->moteur[0][moteurAlimente] = 0;
+            if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
+                a->moteur[2][1] = 1;
         }else{ qDebug("Test 6\n");
-            a->setMoteur(0,moteurAlimente,0);
-            if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(4).getOuvert())
-                a->setMoteur(1,2,1);
+            a->moteur[0][moteurAlimente] = 0;
+            if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert())
+                a->moteur[1][2] = 1;
         }
     }
 
    printf("Test 7\n");
   this->a->R[0].getPompe2().panne();
-   // a->getReservoir(0).getPompe2().panne();
+   // a->R[0].getPompe2().panne();
    //this->a->R[0].panneP2();
     qDebug("Valeur pompe : %d", this->a->R[0].getPompe2().getEtat() );
     qDebug("Test 8\n");
     updateFenetre();
     qDebug("Test 9\n");
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::panneP21()
 {
-    if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getRempli())
+    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
     {
         int i;
         int moteurAlimente = -1;
         for(i = 0 ; i < 3 ; i++)
-            if(a->getMoteur(1,i) == 1 && i != 1)
+            if(a->moteur[1][i] == 1 && i != 1)
                 moteurAlimente = i;
         if(moteurAlimente != -1)
         {
-            a->setMoteur(1,moteurAlimente,0);
+            a->moteur[1][moteurAlimente] = 0;
             switch (moteurAlimente) {
 
                 case 0:
-                    if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(3).getOuvert())
-                        a->setMoteur(2,0,1);
+                    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert())
+                        a->moteur[2][0] = 1;
                     break;
 
                 case 2:
-                    if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(3).getOuvert())
-                        a->setMoteur(0,2,1);
+                    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert())
+                        a->moteur[0][2] = 1;
                     break;
             }
         }
-    }else if(a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getPompe2().getEtat() != 1)
+    }else if(a->R[1].getPompe1().getEtat() == 1 && a->R[1].getPompe2().getEtat() != 1)
     {
-        a->setMoteur(1,1,0);
-        if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(4).getOuvert() && a->getMoteur(2,0) != 1)
-            a->setMoteur(2,1,1);
-        else if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(2).getOuvert() && a->getMoteur(0,2) != 1)
-            a->setMoteur(0,1,1);
+        a->moteur[1][1] = 0;
+        if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert() && a->moteur[2][0] != 1)
+            a->moteur[2][1] = 1;
+        else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert() && a->moteur[0][2] != 1)
+            a->moteur[0][1] = 1;
 
     }
-    a->getReservoir(1).getPompe1().panne();
+    a->R[1].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::panneP22()
 {
-    if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getRempli())
+    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
     {
         int i;
         int moteurAlimente = 1;
         for(i = 0 ; i < 3 ; i++)
-            if(a->getMoteur(1,i) == 1 && i != 1)
+            if(a->moteur[1][i] == 1 && i != 1)
                 moteurAlimente = i;
         if(moteurAlimente == 1)
         {
-            if(a->getReservoir(1).getPompe1().getEtat() != 1)
+            if(a->R[1].getPompe1().getEtat() != 1)
             {
-                a->setMoteur(1,1,0);
-                if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(4).getOuvert() && a->getMoteur(2,0) != 1)
-                    a->setMoteur(2,1,1);
-                else if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(2).getOuvert() && a->getMoteur(0,2) != 1)
-                    a->setMoteur(0,1,1);
+                a->moteur[1][1] = 0;
+                if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert() && a->moteur[2][0] != 1)
+                    a->moteur[2][1] = 1;
+                else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert() && a->moteur[0][2] != 1)
+                    a->moteur[0][1] = 1;
             }
         }else if(moteurAlimente == 0){
-            a->setMoteur(1,moteurAlimente,0);
-            if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getRempli() && !a->getVanne(3).getOuvert())
-                a->setMoteur(2,0,1);
+            a->moteur[1][moteurAlimente] = 0;
+            if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert())
+                a->moteur[2][0] = 1;
         }else{
-            a->setMoteur(1,moteurAlimente,0);
-            if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(3).getOuvert())
-                a->setMoteur(0,2,1);
+            a->moteur[1][moteurAlimente] = 0;
+            if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert())
+                a->moteur[0][2] = 1;
         }
 
     }
-    a->getReservoir(1).getPompe2().panne();
+    a->R[1].getPompe2().panne();
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::panneP31()
 {
-    if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getRempli())
+    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
     {
         int i;
         int moteurAlimente = -1;
         for(i = 0 ; i < 2 ; i++)
-            if(a->getMoteur(2,i) == 1)
+            if(a->moteur[2][i] == 1)
                 moteurAlimente = i;
         if(moteurAlimente != -1)
         {
-            a->setMoteur(2,i,0);
+            a->moteur[2][i] = 0;
             switch (i) {
 
                 case 0:
-                    if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(2).getOuvert())
-                        a->setMoteur(1,0,1);
+                    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert())
+                        a->moteur[1][0] = 1;
                     break;
 
                 case 1:
-                    if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(2).getOuvert())
-                        a->setMoteur(0,1,1);
+                    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert())
+                        a->moteur[0][1] = 1;
                     break;
             }
         }
-    }else if(a->getReservoir(2).getPompe1().getEtat() == 1 && a->getReservoir(2).getPompe2().getEtat() != 1)
+    }else if(a->R[2].getPompe1().getEtat() == 1 && a->R[2].getPompe2().getEtat() != 1)
     {
-        a->setMoteur(2,2,0);
-        if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(4).getOuvert() && a->getMoteur(1,0) != 1)
-            a->setMoteur(1,2,1);
-        else if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(3).getOuvert() && a->getMoteur(0,1) != 1)
-            a->setMoteur(0,2,1);
+        a->moteur[2][2] = 0;
+        if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert() && a->moteur[1][0] != 1)
+            a->moteur[1][2] = 1;
+        else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert() && a->moteur[0][1] != 1)
+            a->moteur[0][2] = 1;
 
     }
-    a->getReservoir(2).getPompe1().panne();
+    a->R[2].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::panneP32()
 {
-    if(a->getReservoir(2).getPompe2().getEtat() == 1 && a->getReservoir(2).getRempli())
+    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
     {
         int moteurAlimente = 2;
         for(int i = 0 ; i < 2 ; i++)
-            if(a->getMoteur(2,i) == 1)
+            if(a->moteur[2][i] == 1)
                 moteurAlimente = i;
         if(moteurAlimente == 2){
-           if(a->getReservoir(2).getPompe1().getEtat() != 1)
+           if(a->R[2].getPompe1().getEtat() != 1)
            {
-                a->setMoteur(2,2,0);
-                if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(4).getOuvert() && a->getMoteur(1,0) != 1)
-                    a->setMoteur(1,2,1);
-                else if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(3).getOuvert() && a->getMoteur(0,1) != 1)
-                    a->setMoteur(0,2,1);
+                a->moteur[2][2] = 0;
+                if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert() && a->moteur[1][0] != 1)
+                    a->moteur[1][2] = 1;
+                else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert() && a->moteur[0][1] != 1)
+                    a->moteur[0][2] = 1;
            }
         }else if(moteurAlimente == 0){
-            a->setMoteur(2,moteurAlimente,0);
-            if(a->getReservoir(1).getPompe2().getEtat() == 1 && a->getReservoir(1).getPompe1().getEtat() == 1 && a->getReservoir(1).getRempli() && !a->getVanne(2).getOuvert())
-                a->setMoteur(1,0,1);
+            a->moteur[2][moteurAlimente] = 0;
+            if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert())
+                a->moteur[1][0] = 1;
         }else{
-            a->setMoteur(2,moteurAlimente,0);
-            if(a->getReservoir(0).getPompe2().getEtat() == 1 && a->getReservoir(0).getPompe1().getEtat() == 1 && a->getReservoir(0).getRempli() && !a->getVanne(2).getOuvert())
-                a->setMoteur(0,1,1);
+            a->moteur[2][moteurAlimente] = 0;
+            if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert())
+                a->moteur[0][1] = 1;
         }
     }
-    a->getReservoir(2).getPompe2().panne();
+    a->R[2].getPompe2().panne();
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::vidangeR1()
 {
-    a->getReservoir(0).vidanger();
-    if( !a->getVanne(0).getOuvert() && a->getReservoir(1).getRempli() && a->nbReservoirVidange() != 3 && ( !a->getReservoir(1).getVidange() || (a->getReservoir(1).getVidange() && !a->getVanne(1).getOuvert()) ) )
-        a->getReservoir(0).setRempli(true);
+    a->R[0].vidanger();
+    if( !a->V[0].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[1].getOuvert()) ) )
+        a->R[0].setRempli(true);
     else{
-        if(a->getReservoir(0).getPompe1().getEtat() == 1){
+        a->R[0].setRempli(true);
+        if(a->R[0].getPompe1().getEtat() == 1 && a->R[0].getPompe2().getEtat() == 1){
             panneP11();
-            a->getReservoir(0).getPompe1().marche();
-        }
-        if(a->getReservoir(0).getPompe2().getEtat() == 1){
             panneP12();
-            a->getReservoir(0).getPompe2().marche();
+            a->R[0].getPompe1().marche();
+            a->R[0].getPompe2().marche();
+        }else{
+            if(a->R[0].getPompe1().getEtat() == 1){
+                panneP11();
+                a->R[0].getPompe1().marche();
+            }
+            if(a->R[0].getPompe2().getEtat() == 1){
+                panneP12();
+                a->R[0].getPompe2().marche();
+            }
         }
+        a->R[0].setRempli(false);
         updateFenetre();
-        if(!a->getVanne(0).getOuvert() && a->getReservoir(1).getVidange() && a->getReservoir(1).getRempli())
+        if(!a->V[0].getOuvert() && a->R[1].getVidange() && a->R[1].getRempli())
             vidangeR2();
     }
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::vidangeR2()
 {
-    a->getReservoir(1).vidanger();
-    if( (!a->getVanne(0).getOuvert() && a->getReservoir(0).getRempli() && !a->getReservoir(0).getVidange() ) || (!a->getVanne(1).getOuvert() && a->getReservoir(2).getRempli() && !a->getReservoir(2).getVidange() ) )
+    a->R[1].vidanger();
+    if( (!a->V[0].getOuvert() && a->R[0].getRempli() && !a->R[0].getVidange() ) || (!a->V[1].getOuvert() && a->R[2].getRempli() && !a->R[2].getVidange() ) )
     {
-        a->getReservoir(1).setRempli(true);
+        a->R[1].setRempli(true);
     }else{
-        if(a->getReservoir(1).getPompe1().getEtat() == 1)
-        {
+        a->R[1].setRempli(true);
+        if(a->R[1].getPompe1().getEtat() == 1 && a->R[1].getPompe2().getEtat() == 1){
             panneP21();
-            a->getReservoir(1).getPompe1().marche();
-        }
-        if(a->getReservoir(1).getPompe2().getEtat() == 1)
-        {
             panneP22();
-            a->getReservoir(1).getPompe2().marche();
+            a->R[1].getPompe1().marche();
+            a->R[1].getPompe2().marche();
+        }else{
+            if(a->R[1].getPompe1().getEtat() == 1){
+                panneP21();
+                a->R[1].getPompe1().marche();
+            }
+            if(a->R[1].getPompe2().getEtat() == 1){
+                panneP22();
+                a->R[1].getPompe2().marche();
+            }
         }
+        a->R[1].setRempli(false);
         updateFenetre();
-        if(!a->getVanne(0).getOuvert() && a->getReservoir(0).getRempli() && a->getReservoir(0).getVidange())
+        if(!a->V[0].getOuvert() && a->R[0].getRempli() && a->R[0].getVidange())
             vidangeR1();
-        if(!a->getVanne(1).getOuvert() && a->getReservoir(2).getRempli() && a->getReservoir(2).getVidange())
+        if(!a->V[1].getOuvert() && a->R[2].getRempli() && a->R[2].getVidange())
             vidangeR3();
     }
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }
 
 void MainWindow::vidangeR3()
 {
-    a->getReservoir(2).vidanger();
-    if( !a->getVanne(1).getOuvert() && a->getReservoir(1).getRempli() && a->nbReservoirVidange() != 3 && ( !a->getReservoir(1).getVidange() || (a->getReservoir(1).getVidange() && !a->getVanne(0).getOuvert()) ) )
-        a->getReservoir(2).setRempli(true);
+    a->R[2].vidanger();
+    if( !a->V[1].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[0].getOuvert()) ) )
+        a->R[2].setRempli(true);
     else{
-        if(a->getReservoir(2).getPompe1().getEtat() == 1)
-        {
+        a->R[2].setRempli(true);
+        if(a->R[2].getPompe1().getEtat() == 1 && a->R[2].getPompe2().getEtat() == 1){
             panneP31();
-            a->getReservoir(2).getPompe1().marche();
-        }
-        if(a->getReservoir(2).getPompe2().getEtat() == 1)
-        {
             panneP32();
-            a->getReservoir(2).getPompe2().marche();
+            a->R[2].getPompe1().marche();
+            a->R[2].getPompe2().marche();
+        }else{
+            if(a->R[2].getPompe1().getEtat() == 1){
+                panneP31();
+                a->R[2].getPompe1().marche();
+            }
+            if(a->R[2].getPompe2().getEtat() == 1){
+                panneP32();
+                a->R[2].getPompe2().marche();
+            }
         }
+        a->R[2].setRempli(false);
         updateFenetre();
-        if(!a->getVanne(1).getOuvert() && a->getReservoir(1).getVidange() && a->getReservoir(1).getRempli() )
+        if(!a->V[1].getOuvert() && a->R[1].getVidange() && a->R[1].getRempli() )
             vidangeR2();
     }
     updateFenetre();
-    if(a->actionNecessaire())
+    if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
-    else if( (int)chrono != 0){
+    else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
         time(&tmp);
-        tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        if((int)(tmp - chrono) > 2)
+            tempsTotalEcoule = tempsTotalEcoule + (int)(tmp - chrono);
+        else
+            decrementerNombreDeChrono();
         chrono = 0;
     }
 }

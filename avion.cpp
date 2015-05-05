@@ -22,7 +22,7 @@ void Avion::reset()
     for(int i = 0; i < 3; i++)
         this->R[i].reset();
     for(int i = 0; i < 5; i++)
-        this->V[i].fermer();
+        this->V[i].ouvrir();
     for(int i = 0; i < 3; i++)
         for(int j = 0; j < 3; j++)
         {
@@ -56,26 +56,6 @@ QPalette Avion::isAlimente(int i)
             return Qt::red;
     }
 
-}
-
-Reservoir &Avion::getReservoir(int i)
-{
-    return R[i];
-}
-
-Vanne &Avion :: getVanne(int i)
-{
-    return V[i];
-}
-
-int &Avion :: getMoteur(int i, int j)
-{
-    return moteur[i][j];
-}
-
-void Avion :: setMoteur(int i, int j, int alimente)
-{
-    moteur[i][j] = alimente;
 }
 
 int Avion :: nbReservoirVidange()
@@ -123,8 +103,6 @@ bool Avion :: actionNecessaire()
             if(moteur[j][i] == 1)
                 nbMoteurAlimente++;
         }
-        if(nbMoteurAlimente != 3)
-            return true;
         if(R[j].getPompe1().getEtat() == 1)
         {
             pompeAllumee++;
@@ -141,6 +119,8 @@ bool Avion :: actionNecessaire()
         if(pompeAllumee > 3)
             return true;
     }
+    if(nbMoteurAlimente != 3)
+        return true;
     if( nbResVide == 0 && ( !V[0].getOuvert() || !V[1].getOuvert() ) )
         return true;
     if( pompeSecAllumee == 0 && ( !V[2].getOuvert() || !V[3].getOuvert() || !V[4].getOuvert() ) )

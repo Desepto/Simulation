@@ -5,7 +5,7 @@ using namespace std;
 
 Vanne :: Vanne()
 {
-	this->ouvert = false;
+    this->ouvert = true;
 }
 
 Vanne :: Vanne(bool ouverture)

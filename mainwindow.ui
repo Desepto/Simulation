@@ -534,7 +534,7 @@
                        </font>
                       </property>
                       <property name="text">
-                       <string>V12</string>
+                       <string>VT12</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -545,7 +545,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="V12">
+                     <widget class="QLabel" name="VT12">
                       <property name="text">
                        <string/>
                       </property>
@@ -1044,7 +1044,7 @@
                        </font>
                       </property>
                       <property name="text">
-                       <string>V23</string>
+                       <string>VT23</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -1055,7 +1055,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="V23">
+                     <widget class="QLabel" name="VT23">
                       <property name="text">
                        <string/>
                       </property>
@@ -1722,7 +1722,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>V21</string>
+                   <string>V12</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -1733,7 +1733,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="V21">
+                 <widget class="QLabel" name="V12">
                   <property name="text">
                    <string/>
                   </property>
@@ -1783,7 +1783,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>V31</string>
+                   <string>V13</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -1794,7 +1794,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="V31">
+                 <widget class="QLabel" name="V13">
                   <property name="text">
                    <string/>
                   </property>
@@ -1844,7 +1844,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>V32</string>
+                   <string>V23</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -1855,7 +1855,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="V32">
+                 <widget class="QLabel" name="V23">
                   <property name="text">
                    <string/>
                   </property>
@@ -3428,7 +3428,7 @@
      <x>0</x>
      <y>0</y>
      <width>838</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">

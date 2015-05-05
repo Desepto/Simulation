@@ -21,10 +21,6 @@ public:
     void reset();
     QPixmap getCouleurAlimMoteur(int i, int j);
     QPalette isAlimente(int i);
-    Reservoir& getReservoir(int i);
-    Vanne& getVanne(int i);
-    int& getMoteur(int i, int j);
-    void setMoteur(int i, int j, int alimente);
 
     friend class MainWindow;
     friend class fenetrePilote;

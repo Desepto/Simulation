@@ -466,7 +466,7 @@
              <item row="0" column="0">
               <widget class="QPushButton" name="V12">
                <property name="text">
-                <string>V12</string>
+                <string>VT12</string>
                </property>
               </widget>
              </item>
@@ -903,7 +903,7 @@
              <item row="0" column="0">
               <widget class="QPushButton" name="V23">
                <property name="text">
-                <string>V23</string>
+                <string>VT23</string>
                </property>
               </widget>
              </item>
@@ -2675,7 +2675,7 @@
              <item row="0" column="0">
               <widget class="QPushButton" name="V21">
                <property name="text">
-                <string>V21</string>
+                <string>V12</string>
                </property>
               </widget>
              </item>
@@ -3112,7 +3112,7 @@
              <item row="0" column="0">
               <widget class="QPushButton" name="V31">
                <property name="text">
-                <string>V31</string>
+                <string>V13</string>
                </property>
               </widget>
              </item>
@@ -3549,7 +3549,7 @@
              <item row="0" column="0">
               <widget class="QPushButton" name="V32">
                <property name="text">
-                <string>V32</string>
+                <string>V23</string>
                </property>
               </widget>
              </item>

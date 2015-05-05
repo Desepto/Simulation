@@ -23,8 +23,7 @@ void Pompe :: panne()
 
 void Pompe :: arret()
 {
-	if(this->etat != -1)
-		this->etat = 0;
+    this->etat = 0;
 }
 
 void Pompe::resetp2()
@@ -34,8 +33,7 @@ void Pompe::resetp2()
 
 void Pompe :: marche()
 {
-	if(this->etat != -1)
-		this->etat = 1;
+    this->etat = 1;
 }
 
 int Pompe :: getEtat() const

@@ -1,28 +1,26 @@
-Liste des bugs trouvés :
+Remarque :
 
-Les vannes ne se mettent pas à jour
-Probablement un pb de au niveau des pompes de tank
-La P32 ne s'allume pas SAUF si tu fermes la V32
-Il semblerait que le score soit toujours de 10/10
-    Le temps total écoulé est de 0
-    J'ai l'impression que y a trop de chronos de lancés (par ex si le chrono est déjà lancé tu as pas à le relancer)
-
-
+Je crois que le qstring fait un peu de la merde qd il affiche les scores parce que
+si c'est pas 10 ou 0 ca affiche un symbole bizar...
 
 A faire :
 Affichage historique
 Les exercices
 
+quand l'avion ne peut plus fonctionner ca serait ptete bien de spawn une fenetre
+qui l'indique et qui réinitialise non?
+
+Si quand on quitte il y a toujours une action a faire (a->actionNecessaire())
+    soit on le note pas, et affiche "Simulation pas fini"
+    soit on lui met 0.
 
 
 Améliorations possible :
-Si moins de 3 pannes résolues : pas de save
+Si moins de 3 pannes résolues : pas de save  (pas obligé je pense)
 Si trop rapide : panne résolue non sauvegardée (et pas comptée comme une panne)
 
 
 
-Corrigés
-Quand on reset : ça met toutes les pompes 2 en mode cassées et le reservoir 3 en mode éteint
 
 
 FAIT :

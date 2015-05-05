@@ -33,6 +33,7 @@ public:
     void demarrerChrono();
     void setChrono(int);
     int getNombreDeChrono();
+    void decrementerNombreDeChrono();
     int getTempsTotalEcoule();
     void setTempsTotalEcoule (int);
     void saveScore();
