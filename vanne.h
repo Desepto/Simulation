@@ -24,8 +24,6 @@ public :
     QPixmap getpixmap();
     QPalette getCouleur();
 	
-    void toString();
-	
 	~Vanne();
 	
 };

@@ -80,7 +80,8 @@ private:
     QTimer* timer;
     int ordrePanneAlea[10];
     time_t chrono;
-    int tempsTotalEcoule, nombreDeChrono;
+    int tempsTotalEcoule;
+    int nombreDeChrono;
     QSqlDatabase BDD;
 };
 

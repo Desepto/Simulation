@@ -26,10 +26,6 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     Avion* a = new Avion();
-  //  MainWindow fenetre1(a);
-  //  MainWindow* f1; f1 = fenetre1;
-   // fenetrePilote fenetre2(a);
-   // fenetrePilote* f2 = fenetre2;
 
     QSqlDatabase BDD;
     QString path = QCoreApplication::applicationDirPath();
@@ -39,8 +35,6 @@ int main(int argc, char *argv[])
 
 
     Identification fenetre3(a, BDD);
-    //fenetre1.show();
-    //fenetre2.show();
     fenetre3.show();
 
     return app.exec();
