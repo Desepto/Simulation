@@ -70,9 +70,9 @@ void MainWindow::updateFenetre(bool premierAppel) // A tester
     updateMoteur(); // fais l'update du moteur et des diodes
 
     qDebug("Etat de l'avion :\n");
-    qDebug("Moteur 1 : rempli : %d / vidange : %d", this->a->R[0].getRempli(), this->a->R[0].getVidange());
-    qDebug("Moteur 2 : rempli : %d / vidange : %d", this->a->R[1].getRempli(), this->a->R[1].getVidange());
-    qDebug("Moteur 3 : rempli : %d / vidange : %d", this->a->R[2].getRempli(), this->a->R[2].getVidange());
+    qDebug("Reservoir 1 : rempli : %d / vidange : %d", this->a->R[0].getRempli(), this->a->R[0].getVidange());
+    qDebug("Reservoir 2 : rempli : %d / vidange : %d", this->a->R[1].getRempli(), this->a->R[1].getVidange());
+    qDebug("Reservoir 3 : rempli : %d / vidange : %d", this->a->R[2].getRempli(), this->a->R[2].getVidange());
     qDebug("Pompe 1.1 : %d / Pompe 1.2 : %d ", this->a->R[0].getPompe1().getEtat(), this->a->R[0].getPompe2().getEtat());
     qDebug("Pompe 2.1 : %d / Pompe 2.2 : %d ", this->a->R[1].getPompe1().getEtat(), this->a->R[1].getPompe2().getEtat());
     qDebug("Pompe 3.1 : %d / Pompe 3.2 : %d ", this->a->R[2].getPompe1().getEtat(), this->a->R[2].getPompe2().getEtat());
@@ -151,7 +151,7 @@ void MainWindow::updateReservoir()
 
 void MainWindow::finSimulation()
 {
-    qDebug()<< "bite";
+    qDebug()<< "debug";
     if(this->timer->isActive())
         timer->stop();
     saveScore();
@@ -159,44 +159,52 @@ void MainWindow::finSimulation()
 
 void MainWindow::saveScore()
 {
-    qDebug() << "Tps total écoulé" << this->getTempsTotalEcoule() << "nombre de chronos" << this->getNombreDeChrono() << endl;
-    int score = 0;
-    if(this->getNombreDeChrono() != 0)
-        score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
-    int stock = 0;
-    qDebug() << "Le score est à : " << score << endl;
-
-    if(score <= 3)
-    {
-        QMessageBox::information(this,"Score", "Votre score est de 10/10 !");
-        stock = 10;
-    }
-    else if (score < 13)
-    {
-        QString str("Votre score est de ");
-        str += QString::number(13 - score) ;
-        str += "/10 !";
+    if(this->getNombreDeChrono() < 2){
+        cout << "nombre chrono " << getNombreDeChrono() << endl;
+        QString str("Vous n'avez pas réparer de panne (ou pas assez), vous n'avez donc pas de score!");
         QMessageBox::information(this,"Score", str);
-        stock = 13 - score;
-    }
-    else
-    {
-        QMessageBox::information(this,"Score", "Votre score est de 0/10 !");
-        stock = 0;
-    }
+    }else if(a->actionNecessaire()){
+        QString str("La simulation n'est pas finie, vous n'avez donc pas de score!");
+        QMessageBox::information(this,"Score", str);
+    }else{
+        qDebug() << "Tps total écoulé" << this->getTempsTotalEcoule() << "nombre de chronos" << this->getNombreDeChrono() << endl;
+        int score = 0;
+        score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
+        int stock = 0;
+        qDebug() << "Le score est à : " << score << endl;
 
-    QSqlQuery rqt;
-    QString usrId;
-    if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
-    {
-        rqt.next();
-        usrId.setNum(rqt.value(0).toInt(), 10);
+        if(score <= 3)
+        {
+            QMessageBox::information(this,"Score", "Votre score est de 10/10 !");
+            stock = 10;
+        }
+        else if (score < 13)
+        {
+            QString str("Votre score est de ");
+            str += QString::number(13 - score) ;
+            str += "/10 !";
+            QMessageBox::information(this,"Score", str);
+            stock = 13 - score;
+        }
+        else
+        {
+            QMessageBox::information(this,"Score", "Votre score est de 0/10 !");
+            stock = 0;
+        }
 
-        qDebug() << usrId;
+        QSqlQuery rqt;
+        QString usrId;
+        if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
+        {
+            rqt.next();
+            usrId.setNum(rqt.value(0).toInt(), 10);
+
+            qDebug() << usrId;
+        }
+        QString Sstock;
+        Sstock.setNum(stock);
+        rqt.exec("INSERT INTO Score (Score, IdUser) VALUES('"+ Sstock +"', '"+ usrId +"')");
     }
-    QString Sstock;
-    Sstock.setNum(stock);
-    rqt.exec("INSERT INTO Score (Score, IdUser) VALUES('"+ Sstock +"', '"+ usrId +"')");
 }
 
 time_t MainWindow :: getChrono(){
@@ -250,9 +258,9 @@ void MainWindow::on_actionStopper_simulation_triggered()
 
 void MainWindow::on_actionR_initialiser_Simulation_triggered()
 {
+    finSimulation();
     this->a->reset();
     this->updateFenetre();
-    finSimulation();
     this->chrono = 0;
     this->tempsTotalEcoule = 0;
     this->nombreDeChrono = 0;
@@ -336,7 +344,13 @@ void MainWindow::panneP11()
     }
     a->R[0].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -388,7 +402,13 @@ void MainWindow::panneP12()
     qDebug("Test 8\n");
     updateFenetre();
     qDebug("Test 9\n");
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -437,7 +457,13 @@ void MainWindow::panneP21()
     }
     a->R[1].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -482,7 +508,13 @@ void MainWindow::panneP22()
     }
     a->R[1].getPompe2().panne();
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -531,7 +563,13 @@ void MainWindow::panneP31()
     }
     a->R[2].getPompe1().panne();
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -573,7 +611,13 @@ void MainWindow::panneP32()
     }
     a->R[2].getPompe2().panne();
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -588,11 +632,10 @@ void MainWindow::panneP32()
 
 void MainWindow::vidangeR1()
 {
-    a->R[0].vidanger();
-    if( !a->V[0].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[1].getOuvert()) ) )
+    if( !a->V[0].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[1].getOuvert()) ) ){
+        a->R[0].vidanger();
         a->R[0].setRempli(true);
-    else{
-        a->R[0].setRempli(true);
+    }else{
         if(a->R[0].getPompe1().getEtat() == 1 && a->R[0].getPompe2().getEtat() == 1){
             panneP11();
             panneP12();
@@ -608,13 +651,22 @@ void MainWindow::vidangeR1()
                 a->R[0].getPompe2().marche();
             }
         }
-        a->R[0].setRempli(false);
+        a->R[0].vidanger();
+        cout << "1" << endl;
         updateFenetre();
         if(!a->V[0].getOuvert() && a->R[1].getVidange() && a->R[1].getRempli())
             vidangeR2();
     }
+    cout << "2" << endl;
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    cout << "3" << endl;
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -629,12 +681,11 @@ void MainWindow::vidangeR1()
 
 void MainWindow::vidangeR2()
 {
-    a->R[1].vidanger();
     if( (!a->V[0].getOuvert() && a->R[0].getRempli() && !a->R[0].getVidange() ) || (!a->V[1].getOuvert() && a->R[2].getRempli() && !a->R[2].getVidange() ) )
     {
+        a->R[1].vidanger();
         a->R[1].setRempli(true);
     }else{
-        a->R[1].setRempli(true);
         if(a->R[1].getPompe1().getEtat() == 1 && a->R[1].getPompe2().getEtat() == 1){
             panneP21();
             panneP22();
@@ -650,7 +701,7 @@ void MainWindow::vidangeR2()
                 a->R[1].getPompe2().marche();
             }
         }
-        a->R[1].setRempli(false);
+        a->R[1].vidanger();
         updateFenetre();
         if(!a->V[0].getOuvert() && a->R[0].getRempli() && a->R[0].getVidange())
             vidangeR1();
@@ -658,7 +709,13 @@ void MainWindow::vidangeR2()
             vidangeR3();
     }
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -673,11 +730,10 @@ void MainWindow::vidangeR2()
 
 void MainWindow::vidangeR3()
 {
-    a->R[2].vidanger();
-    if( !a->V[1].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[0].getOuvert()) ) )
+    if( !a->V[1].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[0].getOuvert()) ) ){
+        a->R[2].vidanger();
         a->R[2].setRempli(true);
-    else{
-        a->R[2].setRempli(true);
+    }else{
         if(a->R[2].getPompe1().getEtat() == 1 && a->R[2].getPompe2().getEtat() == 1){
             panneP31();
             panneP32();
@@ -693,13 +749,19 @@ void MainWindow::vidangeR3()
                 a->R[2].getPompe2().marche();
             }
         }
-        a->R[2].setRempli(false);
+        a->R[2].vidanger();
         updateFenetre();
         if(!a->V[1].getOuvert() && a->R[1].getVidange() && a->R[1].getRempli() )
             vidangeR2();
     }
     updateFenetre();
-    if(a->actionNecessaire() && (int)chrono == 0)
+    if(!a->peutFonctionner())
+    {
+        decrementerNombreDeChrono();
+        chrono = 0;
+        on_actionR_initialiser_Simulation_triggered();
+    }
+    else if(a->actionNecessaire() && (int)chrono == 0)
         demarrerChrono();
     else if(!a->actionNecessaire() && (int)chrono != 0){
         time_t tmp;
@@ -720,7 +782,8 @@ void MainWindow::panneAlea()
     for(int i = 0; i < 9; i++)
         qDebug() << "ordre : " << i << " = " << ordrePanneAlea[i];
     do
-    {test = ordrePanneAlea[9];
+    {
+        test = ordrePanneAlea[9];
         qDebug() << "ordre panne alea[9] =" << ordrePanneAlea[9];
         qDebug() << "la valeur :" << ordrePanneAlea[test];
         switch(ordrePanneAlea[ordrePanneAlea[9]])

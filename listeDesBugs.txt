@@ -1,23 +1,39 @@
-BUGS :
-La fonction de fin ne termine pas la simulation lorsqu'il reste moins de 3 pompes, uniquement quand il n'y a plus de réservoirs
-Quand on utilise les vannes pour envoyer du carburant (les V pas les VT) le bouton change de couleur mais pas le cadre (le tableau moteur est pas mis à jour)
+Remarques :
+
+En ce qui concerne les vannes c'est normal
+ex: j'active la pompe secondaire du reservoir 1 et j'ouvre la vanne v12
+Si le moteur 2 est déjà alimenté alors je décide que la pompe secondaire
+alimentera le moteur 1. Mais ne t'inquiète pas dans les actionNecessaire
+c'est bien compté comme une action superflue.
+Je ne l'affiche pas car si les deux vannes sont ouvertes alors quel moteur
+est ce que cette pompe va alimenter?
+Surtout que peut être qu'un de ces deux moteurs ne devrait pas être alimenté
+alors que l'autre si. Bref c'est un choix que j'ai fais.
+Mais si dans l'exemple après tu désactive la pompe qui alimente le moteur 2
+Ca se met bien a jour et la pompe secondaire du res1 alimentera le moteur 2.
+
+Pour la fonction peut fonctionner, elle marche bien pas de soucis
+je sais pas ou tu as vu qu'elle marchait pas faudra que tu retest parce que j'ai pas vu de pb
+Elle appelait juste pas finsimulation, mais elle afficher bien que l'avion ne pouvait plus fonctionner dans l'onglet en bas
+
+Sinon pour l'affichage des scores je me suis occupé de qd y a pas de chrono de lancé
+ou pas assez de panne résolues et aussi de si la simu n'est pas finit
+Et si l'avion ne peut plus fonctionner je ne prend pas en compte le dernier
+chrono de lancé et décremente le nombre de chrono.
+
+Et j'ai modifier dans réinitialiser un tit truc, c'est que le reset avant la fin simu
+ca fait de la merde parce que du coup on remet tout en marche avant de calculer le score
 
 
-A FAIRE :
-quand l'avion ne peut plus fonctionner ca serait ptete bien de spawn une fenetre
-qui l'indique et qui réinitialise non?
-==> on appelle la fonction finSimulation() qui fait pop son score et après il doit reset à la main
-
-Si quand on quitte il y a toujours une action a faire (a->actionNecessaire())
-    soit on le note pas, et affiche "Simulation pas fini"
-    soit on lui met 0.
-==> Fais comme tu veux, ce qui est le plus simple
-
-Si moins de 3 (on peut réduire à 2 voir 1) pannes résolues : pas de save
-Si trop rapide : panne résolue non sauvegardée (et pas comptée comme une panne)
 Améliorations possible :
 
-
+pannes aléatoire :
+Soit il faut en activer une par une quand on appuie sur le bouton,
+    et du coup ptete mémoriser la/les pannes qui ont déjà eu lieu
+Soit il faut mettre plus de temps entre deux pannes
+Parce que la ca va trop vite et du coup les résolutions comptent pas.
+du coup ptete baisser le tps pas compter a 1 seconde...
+et des fois on a pas le tps de régler une panne qu'une autre est lancé donc a voir.
 
 
 

@@ -119,8 +119,10 @@ bool Avion :: actionNecessaire()
         if(pompeAllumee > 3)
             return true;
     }
-    if(nbMoteurAlimente != 3)
+    if(nbMoteurAlimente != 3){
+        cout << "devrait afficher" << endl;
         return true;
+    }
     if( nbResVide == 0 && ( !V[0].getOuvert() || !V[1].getOuvert() ) )
         return true;
     if( pompeSecAllumee == 0 && ( !V[2].getOuvert() || !V[3].getOuvert() || !V[4].getOuvert() ) )

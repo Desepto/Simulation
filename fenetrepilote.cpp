@@ -105,6 +105,24 @@ void fenetrePilote::modifVT12()
                 modifP22();
                 modifP22();
             }
+            if(!a->V[1].getOuvert() && !a->R[2].getRempli()){
+                a->R[2].setRempli(true);
+                if(a->R[2].getPompe1().getEtat() == 1){
+                    a->moteur[2][2] = 1;
+                    if(a->moteur[0][2] == 1){
+                        modifP12();
+                        modifP12();
+                    }
+                    if(a->moteur[1][2]){
+                        modifP22();
+                        modifP22();
+                    }
+                }
+                if(a->R[2].getPompe2().getEtat() == 1){
+                    modifP32();
+                    modifP32();
+                }
+            }
         }
 
     }
@@ -169,6 +187,24 @@ void fenetrePilote::modifVT23()
             if(a->R[1].getPompe2().getEtat() == 1){
                 modifP22();
                 modifP22();
+            }
+            if(!a->V[0].getOuvert() && !a->R[0].getRempli()){
+                a->R[0].setRempli(true);
+                if(a->R[0].getPompe1().getEtat() == 1){
+                    a->moteur[0][0] = 1;
+                    if(a->moteur[1][0] == 1){
+                        modifP22();
+                        modifP22();
+                    }
+                    if(a->moteur[2][0]){
+                        modifP32();
+                        modifP32();
+                    }
+                }
+                if(a->R[0].getPompe2().getEtat() == 1){
+                    modifP12();
+                    modifP12();
+                }
             }
         }
     }else{
