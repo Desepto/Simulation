@@ -45,14 +45,14 @@ QPixmap Avion::getCouleurAlimMoteur(int i, int j)
         return rouge;
 }
 
-QPalette Avion::isAlimente(int i)
+QPalette Avion::isAlimente(int j)
 {
-    for(int j = 0; j < 3; j++)
+    for(int i = 0; i < 3; i++)
     {
 
         if(this->moteur[i][j])
             return Qt::green;
-        else if(j == 2)
+        else if(i == 2)
             return Qt::red;
     }
 
