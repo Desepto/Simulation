@@ -3487,7 +3487,7 @@
     <string>Afficher historique</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="actionSupprimer_historique">
@@ -3510,10 +3510,16 @@
    <property name="text">
     <string>Afficher Aide</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="actionPannes_automatiques">
    <property name="text">
     <string>Pannes automatiques</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

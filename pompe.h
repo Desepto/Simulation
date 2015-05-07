@@ -17,8 +17,7 @@ public :
     friend ostream& operator << (ostream & os, Pompe p);
 	void panne();
 	void marche();
-	void arret();
-    void resetp2();
+    void arret();
     int getEnFonction();
 	
     int getEtat() const;

@@ -1,6 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/*
+ * Fenetre principale du programme.
+ * Permet de lancer/stopper/réinitialiser la simulation, de lancer les pannes auto, de changer d'utilisateur,
+ * d'afficher ses scores, de supprimer son historique et d'afficher l'aide.
+ * Cette classe contient la majorité des calculs effectués dans le programme.
+ * Les attributs timer/ordrePanneAlea sont utilisés pour les pannes automatiques
+ * Les attributs chrono/tempsTotalEcoule/nombreDeChrono sont utilisés pour le calcul du score
+ */
+
+//
 
 MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent) :
     QMainWindow(parent),
@@ -16,9 +26,9 @@ MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent)
     this->BDD = BDD;
 
     // Initialisation du choix aléatoire de panne
-    //this->ordrePanneAlea = {0,1,2,3,4,5,6,7,8,0};
     for(int i = 0; i < 9; i++)
         this->ordrePanneAlea[i] = i;
+
     this->ordrePanneAlea[9] = 0;
     qsrand(time(NULL));
     int k,l, temp;
@@ -26,16 +36,12 @@ MainWindow::MainWindow(Avion* a, QString nom, QSqlDatabase BDD, QWidget *parent)
     for(int i = 0; i < 30; i++)
     {
         k = qrand() % 9;
-        qDebug() << "k = " << k << endl;
         l = qrand() % 9;
-        qDebug() << "l = " << l << endl;
         temp = ordrePanneAlea[k];
         ordrePanneAlea[k] = ordrePanneAlea[l];
         ordrePanneAlea[l] = temp;
     }
-    for(int i = 0; i < 9; i++)
-        qDebug() << "tab[" << i << "] =" << ordrePanneAlea[i] << endl;
-    // Fin de l'init de choix aléatoire de panne
+    // Fin de l'initialisation de choix aléatoire de panne
 
     connect(timer, SIGNAL(timeout()), this, SLOT(panneAlea()));
 
@@ -57,42 +63,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//Ajoute la fenêtre fenetrePilote dans les attributs
+
 void MainWindow::addfenetre(fenetrePilote *f1)
 {
     this->f1 = f1;
 }
 
-void MainWindow::updateFenetre(bool premierAppel) // A tester
+//Mets à jour l'interface graphique
+
+void MainWindow::updateFenetre(bool premierAppel)
 {
     updateReservoir();
     updatePompe();
     updateVanne();
     updateMoteur(); // fais l'update du moteur et des diodes
 
-    qDebug("Etat de l'avion :\n");
-    qDebug("Reservoir 1 : rempli : %d / vidange : %d", this->a->R[0].getRempli(), this->a->R[0].getVidange());
-    qDebug("Reservoir 2 : rempli : %d / vidange : %d", this->a->R[1].getRempli(), this->a->R[1].getVidange());
-    qDebug("Reservoir 3 : rempli : %d / vidange : %d", this->a->R[2].getRempli(), this->a->R[2].getVidange());
-    qDebug("Pompe 1.1 : %d / Pompe 1.2 : %d ", this->a->R[0].getPompe1().getEtat(), this->a->R[0].getPompe2().getEtat());
-    qDebug("Pompe 2.1 : %d / Pompe 2.2 : %d ", this->a->R[1].getPompe1().getEtat(), this->a->R[1].getPompe2().getEtat());
-    qDebug("Pompe 3.1 : %d / Pompe 3.2 : %d ", this->a->R[2].getPompe1().getEtat(), this->a->R[2].getPompe2().getEtat());
-    qDebug("Vanne VT12 : %d", this->a->V[0].getOuvert());
-    qDebug("Vanne VT23 : %d", this->a->V[1].getOuvert());
-    qDebug("Vanne V12  : %d", this->a->V[2].getOuvert());
-    qDebug("Vanne V23  : %d", this->a->V[3].getOuvert());
-    qDebug("Vanne V31  : %d", this->a->V[4].getOuvert());
-
-    qDebug();
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++)
-            qDebug("Moteur[%d][%d] = %d", i, j, this->a->moteur[i][j]);
-        qDebug("\n");
-    }
-
-    if(premierAppel)
+    if(premierAppel) // Si c'est un bouton de cette fenetre qui a été cliqué
         this->f1->updateFenetre(false);
-
 }
+
+// Met à jour les diodes et la couleur des rectangles des moteurs
 
 void MainWindow::updateMoteur()
 {
@@ -115,6 +106,8 @@ void MainWindow::updateMoteur()
 
 }
 
+// Mise à jour graphique des vannes
+
 void MainWindow::updateVanne()
 {
     this->ui->VT12->setPixmap(this->a->V[0].getpixmap());
@@ -124,9 +117,10 @@ void MainWindow::updateVanne()
     this->ui->V23->setPixmap(this->a->V[4].getpixmap());
 }
 
+// Mise à jour graphique des pompes
+
 void MainWindow::updatePompe()
 {
-    printf("pompe2 = %d\n", this->a->R[0].getPompe2().getEnFonction());
     this->ui->P11->setEnabled(this->a->R[0].getPompe1().getEnFonction());
     this->ui->P12->setEnabled(this->a->R[0].getPompe2().getEnFonction());
 
@@ -149,29 +143,32 @@ void MainWindow::updateReservoir()
     this->ui->F3->setPalette(this->a->R[2].getCouleur());
 }
 
+// Sauvegarde le score et arrête le timer des pannes si il est lancé
+
 void MainWindow::finSimulation()
 {
-    qDebug()<< "debug";
     if(this->timer->isActive())
         timer->stop();
     saveScore();
 }
 
+//Sauvegarde le score du joueur si il a résolu plus de 2 pannes et que
+//l'avion termine dans un etat correct ou irréparable
+
 void MainWindow::saveScore()
 {
     if(this->getNombreDeChrono() < 2){
-        cout << "nombre chrono " << getNombreDeChrono() << endl;
-        QString str("Vous n'avez pas réparer de panne (ou pas assez), vous n'avez donc pas de score!");
-        QMessageBox::information(this,"Score", str);
+        QString str("Nombre de pannes reparees insufisant, score non sauvegarde !");
+        QMessageBox::warning(this,"Score", str);
+
     }else if(a->actionNecessaire()){
         QString str("La simulation n'est pas finie, vous n'avez donc pas de score!");
         QMessageBox::information(this,"Score", str);
+
     }else{
-        qDebug() << "Tps total écoulé" << this->getTempsTotalEcoule() << "nombre de chronos" << this->getNombreDeChrono() << endl;
         int score = 0;
         score = this->getTempsTotalEcoule()/this->getNombreDeChrono();
         int stock = 0;
-        qDebug() << "Le score est à : " << score << endl;
 
         if(score <= 3)
         {
@@ -198,8 +195,6 @@ void MainWindow::saveScore()
         {
             rqt.next();
             usrId.setNum(rqt.value(0).toInt(), 10);
-
-            qDebug() << usrId;
         }
         QString Sstock;
         Sstock.setNum(stock);
@@ -236,6 +231,8 @@ void MainWindow :: setTempsTotalEcoule (int temps){
     tempsTotalEcoule = temps;
 }
 
+//Ferme les deux fenetres et arrête la simulation
+
 void MainWindow::closeEvent(QCloseEvent *)
 {
     this->f1->close();
@@ -243,11 +240,15 @@ void MainWindow::closeEvent(QCloseEvent *)
     finSimulation();
 }
 
+// Lancement de la simulation, déblocage des commandes
+
 void MainWindow::on_actionLancer_Simulation_triggered()
 {
     this->ui->centralwidget->setEnabled(true);
     this->f1->centralWidget()->setEnabled(true);
 }
+
+//arrêt de la simulation, blocage des commandes
 
 void MainWindow::on_actionStopper_simulation_triggered()
 {
@@ -255,6 +256,8 @@ void MainWindow::on_actionStopper_simulation_triggered()
     this->f1->centralWidget()->setEnabled(false);
     this->timer->stop();
 }
+
+// Réinitialisation de la simulation, sauvegarde du score
 
 void MainWindow::on_actionR_initialiser_Simulation_triggered()
 {
@@ -266,6 +269,8 @@ void MainWindow::on_actionR_initialiser_Simulation_triggered()
     this->nombreDeChrono = 0;
 }
 
+// Appel de la fenetre Identification pour changer d'utilisateur
+
 void MainWindow::on_actionChanger_Utilisateur_triggered()
 {
     finSimulation();
@@ -273,29 +278,31 @@ void MainWindow::on_actionChanger_Utilisateur_triggered()
     fenetre->show();
 }
 
+// Affichage de l'aide
+
 void MainWindow::on_actionAfficher_Aide_triggered()
 {
     afficherTexte* fenetre = new afficherTexte(1, this->BDD,this->nom, this);
     fenetre->show();
 }
 
+//Suppression de l'historique de l'utilisateur en cours
+
 void MainWindow::on_actionSupprimer_historique_triggered()
 {
     QSqlQuery rqt;
     QString usrId;
 
-    qDebug() << this->nom;
     if(rqt.exec("SELECT UsrId FROM User Where Nom='" + this->nom + "'"))
     {
         rqt.next();
         usrId.setNum(rqt.value(0).toInt(), 10);
-
-        qDebug() << usrId;
     }
     if(rqt.exec("DELETE FROM Score Where IdUser='" + usrId + "'"))
         QMessageBox::warning(this, "Reussite !", "Suppression effectuee !");
-
 }
+
+// Affichage de l'historique de l'utilisateur
 
 void MainWindow::on_actionAfficher_historique_triggered()
 {
@@ -303,10 +310,16 @@ void MainWindow::on_actionAfficher_historique_triggered()
     fenetre->show();
 }
 
+// Lance le timer utilisé pour les pannes automatiques
+
 void MainWindow::on_actionPannes_automatiques_triggered()
 {
-    this->timer->start(5000);
+    qsrand(time(NULL));
+    int alea = (10 + (qrand() % 11)) * 1000;
+    this->timer->start(alea);
 }
+
+// Met en panne la pompe P11
 
 void MainWindow::panneP11()
 {
@@ -364,18 +377,20 @@ void MainWindow::panneP11()
 
 }
 
+// Met en panne la pompe P12
+
 void MainWindow::panneP12()
-{ qDebug("Test 1\n");
+{
     if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
-    { qDebug("Test 2\n");
+    {
         int moteurAlimente = 0;
         for(int i = 0 ; i < 3 ; i++)
             if(a->moteur[0][i] == 1)
                 moteurAlimente = i;
         if(moteurAlimente == 0)
-        {qDebug("Test 3\n");
+        {
             if(a->R[0].getPompe1().getEtat() != 1)
-            {qDebug("Test 4\n");
+            {
                 a->moteur[0][0] = 0;
                 if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert() && a->moteur[2][1] != 1)
                     a->moteur[2][0] = 1;
@@ -383,25 +398,19 @@ void MainWindow::panneP12()
                     a->moteur[1][0] = 1;
             }
         }else if(moteurAlimente == 1)
-        {qDebug("Test 5\n");
+        {
             a->moteur[0][moteurAlimente] = 0;
             if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
                 a->moteur[2][1] = 1;
-        }else{ qDebug("Test 6\n");
+        }else{
             a->moteur[0][moteurAlimente] = 0;
             if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert())
                 a->moteur[1][2] = 1;
         }
     }
 
-   printf("Test 7\n");
   this->a->R[0].getPompe2().panne();
-   // a->R[0].getPompe2().panne();
-   //this->a->R[0].panneP2();
-    qDebug("Valeur pompe : %d", this->a->R[0].getPompe2().getEtat() );
-    qDebug("Test 8\n");
     updateFenetre();
-    qDebug("Test 9\n");
     if(!a->peutFonctionner())
     {
         decrementerNombreDeChrono();
@@ -420,6 +429,8 @@ void MainWindow::panneP12()
         chrono = 0;
     }
 }
+
+// Met en panne la pompe P21
 
 void MainWindow::panneP21()
 {
@@ -476,6 +487,8 @@ void MainWindow::panneP21()
     }
 }
 
+// Met en panne la pompe P22
+
 void MainWindow::panneP22()
 {
     if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
@@ -526,6 +539,8 @@ void MainWindow::panneP22()
         chrono = 0;
     }
 }
+
+// Met en panne la pompe P31
 
 void MainWindow::panneP31()
 {
@@ -582,6 +597,8 @@ void MainWindow::panneP31()
     }
 }
 
+// Met en panne la pompe P32
+
 void MainWindow::panneP32()
 {
     if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
@@ -630,6 +647,8 @@ void MainWindow::panneP32()
     }
 }
 
+// Vidange le réservoir R1
+
 void MainWindow::vidangeR1()
 {
     if( !a->V[0].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[1].getOuvert()) ) ){
@@ -652,14 +671,11 @@ void MainWindow::vidangeR1()
             }
         }
         a->R[0].vidanger();
-        cout << "1" << endl;
         updateFenetre();
         if(!a->V[0].getOuvert() && a->R[1].getVidange() && a->R[1].getRempli())
             vidangeR2();
     }
-    cout << "2" << endl;
     updateFenetre();
-    cout << "3" << endl;
     if(!a->peutFonctionner())
     {
         decrementerNombreDeChrono();
@@ -678,6 +694,8 @@ void MainWindow::vidangeR1()
         chrono = 0;
     }
 }
+
+// Vidange le réservoir R2
 
 void MainWindow::vidangeR2()
 {
@@ -728,6 +746,8 @@ void MainWindow::vidangeR2()
     }
 }
 
+// Vidange le réservoir R3
+
 void MainWindow::vidangeR3()
 {
     if( !a->V[1].getOuvert() && a->R[1].getRempli() && a->nbReservoirVidange() != 3 && ( !a->R[1].getVidange() || (a->R[1].getVidange() && !a->V[0].getOuvert()) ) ){
@@ -774,102 +794,101 @@ void MainWindow::vidangeR3()
     }
 }
 
+// Fait tomber aléatoirement un élément de l'avion
+
 void MainWindow::panneAlea()
 {
     bool termine = false;
     int test;
 
-    for(int i = 0; i < 9; i++)
-        qDebug() << "ordre : " << i << " = " << ordrePanneAlea[i];
     do
     {
-        test = ordrePanneAlea[9];
-        qDebug() << "ordre panne alea[9] =" << ordrePanneAlea[9];
-        qDebug() << "la valeur :" << ordrePanneAlea[test];
         switch(ordrePanneAlea[ordrePanneAlea[9]])
         {
-            case 0:
-                if(!this->a->R[0].getVidange())
-                {
-                    termine = true;
-                    vidangeR1();
-                }
-                ordrePanneAlea[9]++;
+        case 0:
+            if(!this->a->R[0].getVidange())
+            {
+                termine = true;
+                vidangeR1();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 1:
-                if(!this->a->R[1].getVidange())
-                {
-                    termine = true;
-                    vidangeR2();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 1:
+            if(!this->a->R[1].getVidange())
+            {
+                termine = true;
+                vidangeR2();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 2:
-                if(!this->a->R[2].getVidange())
-                {
-                    termine = true;
-                    vidangeR3();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 2:
+            if(!this->a->R[2].getVidange())
+            {
+                termine = true;
+                vidangeR3();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 3:
-            if(this->a->R[0].getPompe1().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP11();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 3:
+        if(this->a->R[0].getPompe1().getEtat() != -1)
+            {
+                termine = true;
+                panneP11();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 4:
-                if(this->a->R[0].getPompe2().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP12();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 4:
+            if(this->a->R[0].getPompe2().getEtat() != -1)
+            {
+                termine = true;
+                panneP12();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 5:
-                if(this->a->R[1].getPompe1().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP21();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 5:
+            if(this->a->R[1].getPompe1().getEtat() != -1)
+            {
+                termine = true;
+                panneP21();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 6:
-                if(this->a->R[1].getPompe2().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP22();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 6:
+            if(this->a->R[1].getPompe2().getEtat() != -1)
+            {
+                termine = true;
+                panneP22();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 7:
-                if(this->a->R[2].getPompe1().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP31();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 7:
+            if(this->a->R[2].getPompe1().getEtat() != -1)
+            {
+                termine = true;
+                panneP31();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-            case 8:
-                if(this->a->R[2].getPompe2().getEtat() != -1)
-                {
-                    termine = true;
-                    panneP32();
-                }
-                ordrePanneAlea[9]++;
+            break;
+        case 8:
+            if(this->a->R[2].getPompe2().getEtat() != -1)
+            {
+                termine = true;
+                panneP32();
+            }
+            ordrePanneAlea[9]++;
 
-                break;
-
+            break;
         }
     } while(termine == false);
+
+    int alea = (10 + (qrand() % 11)) * 1000;
+    this->timer->setInterval(alea);
 }

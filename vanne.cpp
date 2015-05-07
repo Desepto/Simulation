@@ -1,7 +1,9 @@
-#include <iostream>
-#include <string.h>
 #include "vanne.h"
-using namespace std;
+
+/* Classe représentant les vannes dans l'avion
+ * Une vanne ne sait pas à quoi elle est reliée.
+ * Son traitement se fait donc principalement dans avion/mainwindow
+ */
 
 Vanne :: Vanne()
 {
@@ -23,22 +25,28 @@ ostream & operator << (ostream& os, Vanne v)
     return os;
 }
 
-// Vidange et remplir sont des setteurs : Plus clair
+// Fermeture de la vanne
 
 void Vanne :: fermer()
 {
 	this->ouvert = false;
 }
 
+//Ouverture de la vanne
+
 void Vanne :: ouvrir()
 {
 	this->ouvert = true;
 }
 
+//Renvoie l'état de la vanne
+
 bool Vanne :: getOuvert()
 {
     return this->ouvert;
 }
+
+//Fonction utilisée pour simplifier du code (updateFenetre de mainwindow)
 
 QPixmap Vanne::getpixmap()
 {
@@ -48,6 +56,8 @@ QPixmap Vanne::getpixmap()
         return QPixmap(":/icones/vert");
 }
 
+// Fonction utilisée pour simplifier du code (updateFenetre de mainwindow)
+
 QPalette Vanne::getCouleur()
 {
     if(this->ouvert)
@@ -56,10 +66,4 @@ QPalette Vanne::getCouleur()
         return Qt::green;
 }
 
-Vanne :: ~Vanne()
-{
-	if(this->ouvert)
-		cout << "Vanne ouverte détruite" << endl;
-	else
-		cout << "Vanne fermée détruite" << endl;
-}
+Vanne :: ~Vanne(){}

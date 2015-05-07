@@ -1,8 +1,11 @@
-using namespace std;
-#include <iostream>
-#include <string.h>
-#include "vanne.h"
 #include "reservoir.h"
+
+/*
+ * Cette classe représente les reservoirs de l'avion.
+ * Un réservoir a deux types d'état, en panne et rempli.
+ * En effet si il est alimenté par un réservoir voisin il peut être à la fois en panne et rempli
+ * Cependant au moment ou la vanne est rouverte entre les deux réservoirs il retourne aux états en panne/vide
+ */
 
 
 Reservoir :: Reservoir() : p1(1), p2(0)
@@ -28,8 +31,7 @@ ostream & operator << (ostream& os, Reservoir r)
     return os;
 }
 
-// Vidange et remplir sont des setteurs : Plus clair mais reviens à 
-//avoir la variable en public
+//Panne du réservoir
 
 void Reservoir :: vidanger()
 {
@@ -37,20 +39,28 @@ void Reservoir :: vidanger()
     this->vidange = true;
 }
 
+//Renvoie le remplissage du reservoir
+
 bool Reservoir :: getRempli()
 {
     return this->rempli;
 }
+
+//Rempli le réservoir
 
 void Reservoir :: setRempli(bool rempli)
 {
     this->rempli = rempli;
 }
 
+//Met le réservoir en panne
+
 bool Reservoir :: getVidange()
 {
     return this->vidange;
 }
+
+// Utilisée pour simplifier du code (updateFenetre de mainwindow)
 
 QPalette Reservoir::getCouleur()
 {
@@ -62,29 +72,29 @@ QPalette Reservoir::getCouleur()
         return Qt::red;
 }
 
+//Renvoie une référence sur la P1 pour pouvoir la modifier
+
 Pompe &Reservoir::getPompe1()
 {
     return this->p1;
 }
+
+//Renvoie une référence sur la P2 pour pouvoir la modifier
 
 Pompe &Reservoir::getPompe2()
 {
     return this->p2;
 }
 
-Reservoir :: ~Reservoir()
-{
-	if(this->rempli)
-		cout << "Réservoir rempli détruit" << endl;
-	else
-        cout << "Réservoir vide détruit" << endl;
-}
+Reservoir :: ~Reservoir(){}
+
+// Remet le réservoir à sa configuration d'origine
 
 void Reservoir::reset()
 {
     this->rempli = true;
     this->vidange = false;
     this->p1.marche();
-    this->p2.resetp2();
+    this->p2.arret();
 }
 

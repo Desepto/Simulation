@@ -4,6 +4,7 @@ using namespace std;
 #include <iostream>
 #include "pompe.h"
 #include <QPalette>
+#include <iostream>
 
 class Reservoir
 {
@@ -23,7 +24,6 @@ public :
     bool getRempli();
     void setRempli(bool rempli);
     bool getVidange();
-   // void panneP2();
     QPalette getCouleur();
     Pompe& getPompe1();
     Pompe& getPompe2();

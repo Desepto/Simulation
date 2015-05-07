@@ -7,7 +7,6 @@ HEADERS += \
     vanne.h \
     reservoir.h \
     pompe.h \
-    main.h \
     avion.h \
     mainwindow.h \
     fenetrepilote.h \

@@ -3,6 +3,11 @@ using namespace std;
 #include <string.h>
 #include "pompe.h"
 
+/*
+ * La classe pompe représente les pompes de l'avion et sont contenues par paires dans un réservoir
+ */
+
+
 Pompe :: Pompe()
 {
 	this->etat = -1;
@@ -13,33 +18,35 @@ Pompe :: Pompe(int etat)
 	this->etat = etat;
 }
 
-//Ce sont des setteurs : Plus clair mais reviens à 
-//avoir la variable en public
+// Met en panne la pompe
 
 void Pompe :: panne()
 {
 	this->etat = -1;
 }
 
+//Arrête la pompe
+
 void Pompe :: arret()
 {
     this->etat = 0;
 }
 
-void Pompe::resetp2()
-{
-    this->etat = 0;
-}
+//Met la pompe en marche
 
 void Pompe :: marche()
 {
     this->etat = 1;
 }
 
+//Retourne l'état de la pompe
+
 int Pompe :: getEtat() const
 {
     return this->etat;
 }
+
+//Indique si la pompe peut fonctionner
 
 int Pompe::getEnFonction()
 {
@@ -48,6 +55,8 @@ int Pompe::getEnFonction()
     else
         return 1;
 }
+
+//Similaire à getEnFonction mais nécessaire pour simplifier du code
 
 bool Pompe::isMarche()
 {
@@ -80,16 +89,6 @@ ostream & operator << (ostream & os, Pompe p)
     return os;
 }
 
-Pompe :: ~Pompe()
-{
-    /*
-	if(this->etat == -1)
-		cout << "Destruction d'une pompe en panne" << endl;
-	else if(this->etat == 0)
-		cout << "Destruction d'une pompe à l'arrêt" << endl;
-	else
-		cout << "Destruction d'une pompe en marche" << endl;
-        */
-}
+Pompe :: ~Pompe() {}
 
 

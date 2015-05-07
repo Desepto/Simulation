@@ -1,8 +1,9 @@
 using namespace std;
 #include "identification.h"
 #include "ui_identification.h"
-#include <iostream>
-#include <QMessageBox>
+
+/* Classe permettant la connexion ou l'inscription d'une personne auprès de l'application
+  */
 
 Identification::Identification(Avion *a, QSqlDatabase BDD, QWidget *parent) :
     QDialog(parent), ui(new Ui::Identification)
@@ -12,9 +13,7 @@ Identification::Identification(Avion *a, QSqlDatabase BDD, QWidget *parent) :
     ui->setupUi(this);
     //Chemin BDD
     QString path = QCoreApplication::applicationDirPath();
-    qDebug() << path;
     path += "/Simulation.sqlite";
-    qDebug() << path;
 
     if(this->parent == 0)
     {
@@ -45,9 +44,12 @@ Identification::~Identification()
     delete ui;
 }
 
+//Lors d'un clic sur OK
+// Vérification si l'utilisateur est bien dans la base de donnée si "Inscription" n'est pas coché
+// Création du compte si l'utilisateur a coché la case Inscription et que l'identifiant n'est pas déjà pris
+
 void Identification::on_validation_accepted()
 {
-    printf("bite 2\n");
     bool etapeSuivante = false;
     //Inscription
     if(ui->inscription->isChecked())
@@ -96,8 +98,8 @@ void Identification::on_validation_accepted()
         fenetrePilote* fenetre2 = new fenetrePilote(this->a);
         fenetre1->addfenetre(fenetre2);
         fenetre2->addfenetre(fenetre1);
-        fenetre1->show();
         fenetre2->show();
+        fenetre1->show();
 
         this->close();
         if(this->parent != 0)
@@ -107,6 +109,8 @@ void Identification::on_validation_accepted()
 
 
 }
+
+//Fermeture de la fenetre si l'utilisateur clique sur "cancel"
 
 void Identification::on_validation_rejected()
 {

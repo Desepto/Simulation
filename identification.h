@@ -6,6 +6,8 @@
 #include <QFileInfo>
 #include "mainwindow.h"
 #include "fenetrepilote.h"
+#include <iostream>
+#include <QMessageBox>
 
 namespace Ui {
 class Identification;

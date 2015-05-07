@@ -1,6 +1,10 @@
 #include "fenetrepilote.h"
 #include "ui_fenetrepilote.h"
 
+/*
+  Fenetre affichant les différents boutons et leurs états que le pilote peut utiliser pour modifier l'état de son avion.
+  */
+
 fenetrePilote::fenetrePilote(Avion* a,QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::fenetrePilote)
@@ -22,11 +26,12 @@ fenetrePilote::fenetrePilote(Avion* a,QWidget *parent) :
 
 fenetrePilote::~fenetrePilote()
 {
-    cout << "Destruction fenetre pilote" << endl;
     delete ui;
 }
 
-void fenetrePilote::updateFenetre(bool premierAppel) // A tester
+// Met à jour la fenêtre, cliquabilité des boutons / couleurs des cadres
+
+void fenetrePilote::updateFenetre(bool premierAppel)
 {
 
     this->ui->F1->setPalette(this->a->V[0].getCouleur());
@@ -43,30 +48,34 @@ void fenetrePilote::updateFenetre(bool premierAppel) // A tester
     this->ui->P22->setEnabled(this->a->R[1].getPompe2().isMarche());
     this->ui->P32->setEnabled(this->a->R[2].getPompe2().isMarche());
 
-   if(premierAppel)
-    {
-        printf("test\n");
+   if(premierAppel) // Si le bouton a été cliqué sur cette fenêtre
         this->f1->updateFenetre(false);
-    }
-
 }
+
+// Ajoute la fenetre mainwindow à ses paramètres
 
 void fenetrePilote::addfenetre(MainWindow *f1)
 {
     this->f1 = f1;
 }
 
-
+// Ferme les deux fenetres
 
 void fenetrePilote::closeEvent(QCloseEvent *)
 {
     this->f1->close();
     this->close();
 }
+/*
+  Ensemble des slots appelés lors d'appui sur les boutons
+  Chaque slot modifie les paramètres de la classe Avion puis appelle la fonction de mise à jour
+  */
 
+// Ferme/ouvre la vanne VT12
+// Si on la ferme : vérification de la possibilité d'alimenter les autres moteurs et de cette possible répercution
+// Si on ouvre : vérification si un autre moteur n'est pas plus alimenté et ses possibles répercusions
 void fenetrePilote::modifVT12()
 {
-
     if(a->V[0].getOuvert())
     {
         a->V[0].fermer();
@@ -148,6 +157,7 @@ void fenetrePilote::modifVT12()
         f1->demarrerChrono();
 }
 
+// Idem que modifVT12
 void fenetrePilote::modifVT23()
 {
     if(a->V[1].getOuvert())
@@ -228,6 +238,9 @@ void fenetrePilote::modifVT23()
         f1->demarrerChrono();
 }
 
+// Ferme/ouvre la vanne V12
+// Si on la ferme : vérifie si on peut alimenter un moteur de cette manière et si oui l'alimente
+// Si on l'ouvre : arrête d'alimenter un moteur si on l'alimentait
 void fenetrePilote::modifV12()
 {
     if(a->V[2].getOuvert())
@@ -266,6 +279,7 @@ void fenetrePilote::modifV12()
         f1->demarrerChrono();
 }
 
+//Idem que modifV12
 void fenetrePilote::modifV13()
 {
     if(a->V[3].getOuvert())
@@ -304,6 +318,7 @@ void fenetrePilote::modifV13()
         f1->demarrerChrono();
 }
 
+//Idem que modifV12
 void fenetrePilote::modifV23()
 {
     if(a->V[4].getOuvert())
@@ -342,6 +357,10 @@ void fenetrePilote::modifV23()
         f1->demarrerChrono();
 }
 
+//Allume/éteint la pompe secondaire du moteur correspondant
+// Si on l'allume on vérifie, on alimente le moteur ayant le même nombre si la pompe principale n'est pas
+// fonctionnelle ou si il n'y a aucun autre moteur à alimenter, dans le cas contraire on allume l'autre moteur
+// Si on l'éteint on coupe l'apport en carburant auprès du moteur précédemment alimenté
 void fenetrePilote::modifP12()
 {
     if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
@@ -368,8 +387,6 @@ void fenetrePilote::modifP12()
                       a->moteur[1][2] = 1;
               }
           }
-    }else if(a->R[0].getPompe2().getEtat() == -1){
-        cout << "Cette pompe est en panne, vous ne pouvez donc effectuer aucune action."<< endl;
     }else if(a->R[0].getPompe2().getEtat() == 0 && a->R[0].getRempli()){
         a->R[0].getPompe2().marche();
         if(a->R[0].getPompe1().getEtat() != 1)
@@ -410,6 +427,7 @@ void fenetrePilote::modifP12()
         f1->demarrerChrono();
 }
 
+//Idem que modifP12
 void fenetrePilote::modifP22()
 {
     if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
@@ -436,8 +454,6 @@ void fenetrePilote::modifP22()
                     a->moteur[0][2] = 1;
             }
         }
-    }else if(a->R[1].getPompe2().getEtat() == -1){
-        cout << "Cette pompe est en panne, vous ne pouvez donc effectuer aucune action."<< endl;
     }else if(a->R[1].getPompe2().getEtat() == 0 && a->R[1].getRempli()){
         a->R[1].getPompe2().marche();
         if(a->R[1].getPompe1().getEtat() != 1)
@@ -479,6 +495,7 @@ void fenetrePilote::modifP22()
         f1->demarrerChrono();
 }
 
+//Idem que modifP12
 void fenetrePilote::modifP32()
 {
     if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
@@ -505,8 +522,6 @@ void fenetrePilote::modifP32()
                     a->moteur[0][1] = 1;
             }
         }
-    }else if(a->R[2].getPompe2().getEtat() == -1){
-        cout << "Cette pompe est en panne, vous ne pouvez donc effectuer aucune action."<< endl;
     }else if(a->R[2].getPompe2().getEtat() == 0 && a->R[2].getRempli()){
         a->R[2].getPompe2().marche();
         if(a->R[2].getPompe1().getEtat() != 1)

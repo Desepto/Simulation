@@ -1,11 +1,3 @@
-#include <iostream>
-#include <string.h>
-#include "reservoir.h"
-#include "pompe.h"
-#include "vanne.h"
-#include "main.h"
-#include "mainwindow.h"
-#include "fenetrepilote.h"
 #include "avion.h"
 #include "identification.h"
 #include <QApplication>
@@ -14,11 +6,12 @@
 
 using namespace std;
 
-
 /* 
- * 
- * Blah Blah
- * 
+ * Ouverture de l'application
+ * Lancement d l'avion
+ * Ouverture de la BDD
+ * Ouverture de la fenêtre d'identification
+ *
  */
 	
 
@@ -32,7 +25,6 @@ int main(int argc, char *argv[])
     path += "/Simulation.sqlite";
     BDD = QSqlDatabase::addDatabase("QSQLITE");
     BDD.setDatabaseName(path);
-
 
     Identification fenetre3(a, BDD);
     fenetre3.show();

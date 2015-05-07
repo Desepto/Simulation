@@ -1,5 +1,11 @@
 #include "avion.h"
 
+/*
+  Classe stockant tous les élements de l'avion (Réservoirs/vannes/pompes) ainsi que quelques méthodes pour les manipuler
+  */
+
+// Il n'y a qu'un constructeur par défaut car un avion commence toujours dans un même état
+
 Avion::Avion()
 {
     for(int i = 0; i < 3; i++)
@@ -16,6 +22,8 @@ Avion::Avion()
                 moteur[i][j] = 0;
         }
 }
+
+//Remise à zéro de l'avion lors d'une réinitialisation de l'utilisateur
 
 void Avion::reset()
 {
@@ -34,6 +42,8 @@ void Avion::reset()
 
 }
 
+//Fonction utilisée pour simplifier du code dans udpateFenetre() de mainwindow
+
 QPixmap Avion::getCouleurAlimMoteur(int i, int j)
 {
     QPixmap vert(":/icones/vert");
@@ -45,6 +55,8 @@ QPixmap Avion::getCouleurAlimMoteur(int i, int j)
         return rouge;
 }
 
+//Fonction utilisée pour simplifier du code dans udpateFenetre() de mainwindow
+
 QPalette Avion::isAlimente(int j)
 {
     for(int i = 0; i < 3; i++)
@@ -55,8 +67,9 @@ QPalette Avion::isAlimente(int j)
         else if(i == 2)
             return Qt::red;
     }
-
 }
+
+//Fonction renvoyant le nombre de réservoirs vidangés
 
 int Avion :: nbReservoirVidange()
 {
@@ -66,6 +79,9 @@ int Avion :: nbReservoirVidange()
             res++;
     return res;
 }
+
+//Renvoit un boolean indiquant si il est encore possible de réparer l'avion
+// L'avion est réparable ssi il y a au moins 3 pompes alimentables fonctionnelles
 
 bool Avion :: peutFonctionner()
 {
@@ -86,11 +102,12 @@ bool Avion :: peutFonctionner()
         return true;
 }
 
+//Fonction indiquant si une action du pilote est nécessaire pour revenir dans un état normal
+
 bool Avion :: actionNecessaire()
 {
     if(!peutFonctionner())
     {
-        cout << "L'avion ne peut plus fonctionner!" << endl;
         return false;
     }
     int pompeAllumee = 0;
@@ -119,10 +136,8 @@ bool Avion :: actionNecessaire()
         if(pompeAllumee > 3)
             return true;
     }
-    if(nbMoteurAlimente != 3){
-        cout << "devrait afficher" << endl;
+    if(nbMoteurAlimente != 3)
         return true;
-    }
     if( nbResVide == 0 && ( !V[0].getOuvert() || !V[1].getOuvert() ) )
         return true;
     if( pompeSecAllumee == 0 && ( !V[2].getOuvert() || !V[3].getOuvert() || !V[4].getOuvert() ) )

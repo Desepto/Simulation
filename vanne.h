@@ -5,6 +5,7 @@ using namespace std;
 #include <iostream>
 #include <QPixmap>
 #include <QPalette>
+#include <string.h>
 
 class Vanne
 {
