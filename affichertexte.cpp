@@ -27,8 +27,8 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
     {
 
         this->setWindowTitle("Scores");
-        QString aEcrire = "Dix derniers scores pour : \n", usrId;
-        aEcrire += nom + "\n";
+        QString aEcrire = "Dix derniers scores pour ", usrId;
+        aEcrire += nom + " : \n";
         QSqlQuery rqt;
         if(rqt.exec("SELECT UsrId FROM User Where Nom='" + nom + "'"))
         { // Récupération de l'id utilisateur
@@ -38,7 +38,8 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
 
         rqt.exec("SELECT Score FROM Score WHERE IdUser='"+ usrId +"'");
         int max = 0, total = 0, nbScores = 0, temp = 0;
-        while(rqt.next())
+
+        while(rqt.isValid() && rqt.next())
         { // parcours de tous les résultats
             temp = rqt.value(0).toInt();
             if( nbScores < 10)
@@ -53,8 +54,13 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
             nbScores++;
         }
         //Affichage du max + la moyenne
-        aEcrire += "Meilleur score : " + QString::number(max) + " ! \n\n";
-        aEcrire += "Moyenne des scores : " + QString::number((double) (total / nbScores)) +" ! \n";
+        if(nbScores == 0)
+            aEcrire += "Aucun score enregistre";
+        else
+        {
+            aEcrire += "Meilleur score : " + QString::number(max) + " ! \n\n";
+            aEcrire += "Moyenne des scores : " + QString::number((double) (total / nbScores)) +" ! \n";
+        }
 
     this->ui->texte->setText(aEcrire);
     }

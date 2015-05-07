@@ -1,3 +1,7 @@
+bug lors de l'affichage des scores si aucun score enregistré.
+la mise de spannes continue après un arrêt (chais plus lequel)
+
+
 Remarques :
 
 En ce qui concerne les vannes c'est normal
