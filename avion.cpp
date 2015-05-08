@@ -67,6 +67,7 @@ QPalette Avion::isAlimente(int j)
         else if(i == 2)
             return Qt::red;
     }
+    return Qt::red;
 }
 
 //Fonction renvoyant le nombre de réservoirs vidangés

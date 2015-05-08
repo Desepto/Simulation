@@ -133,13 +133,13 @@ void MainWindow::updatePompe()
 
 void MainWindow::updateReservoir()
 {
-    this->ui->R1->setEnabled(this->a->R[0].getRempli());
+    this->ui->R1->setEnabled(!this->a->R[0].getVidange());
     this->ui->F1->setPalette(this->a->R[0].getCouleur());
 
-    this->ui->R2->setEnabled(this->a->R[1].getRempli());
+    this->ui->R2->setEnabled(!this->a->R[1].getVidange());
     this->ui->F2->setPalette(this->a->R[1].getCouleur());
 
-    this->ui->R3->setEnabled(this->a->R[2].getRempli());
+    this->ui->R3->setEnabled(!this->a->R[2].getVidange());
     this->ui->F3->setPalette(this->a->R[2].getCouleur());
 }
 
@@ -833,7 +833,6 @@ void MainWindow::vidangeR3()
 void MainWindow::panneAlea()
 {
     bool termine = false;
-    int test;
 
     do
     {

@@ -20,7 +20,11 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
         aEcrire += "Attention a ne pas lancer les pannes automatiques alors que la simulation n'est pas lancee ! \n";
         aEcrire += "Pour resoudre les problemes de l'avion cliquez sur les boutons de la fenetre Pilote \n";
         aEcrire += "Pour etre dans un etat stable un avion ne doit avoir que 3 pompes fournissant du carburant d'allumees \n";
-        aEcrire += "Bonne chance et que la force soit avec vous ! \n";
+        aEcrire += "Bonne chance et que la force soit avec vous ! \n\n\n";
+        aEcrire += "Legende : \n";
+        aEcrire += "- Vert : en fonctionnement/approvisione en carburant\n";
+        aEcrire += "- Rouge : eteint/non-approvisione en carburant\n";
+        aEcrire += "- Bleu : en panne\n";
         this->ui->texte->setText(aEcrire);
     }
     if(aAfficher == 2) // AFFICHAGE DES SCORES
