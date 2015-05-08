@@ -2,9 +2,9 @@
 
 /*
  * Cette classe représente les reservoirs de l'avion.
- * Un réservoir a deux types d'état, en panne et rempli.
- * En effet si il est alimenté par un réservoir voisin il peut être à la fois en panne et rempli
- * Cependant au moment ou la vanne est rouverte entre les deux réservoirs il retourne aux états en panne/vide
+ * Un réservoir a deux types d'état, vidange et rempli.
+ * En effet si il est alimenté par un réservoir voisin il peut être à la fois vidange et rempli
+ * Cependant au moment ou la vanne est réouverte entre les deux réservoirs il retourne aux états vidange et vide
  */
 
 
@@ -53,7 +53,7 @@ void Reservoir :: setRempli(bool rempli)
     this->rempli = rempli;
 }
 
-//Met le réservoir en panne
+//Renvoie l'etat de vidange du reservoir
 
 bool Reservoir :: getVidange()
 {

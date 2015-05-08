@@ -72,8 +72,8 @@ void fenetrePilote::closeEvent(QCloseEvent *)
   */
 
 // Ferme/ouvre la vanne VT12
-// Si on la ferme : vérification de la possibilité d'alimenter les autres moteurs et de cette possible répercution
-// Si on ouvre : vérification si un autre moteur n'est pas plus alimenté et ses possibles répercusions
+// Si on la ferme : vérification de la possibilité d'alimenter les autres reservoirs et des possibles répercutions sur l'avion
+// Si on ouvre : vérification si un autre moteur n'etait pas alimenté via cette vanne et des possibles répercutions s'il l'était
 void fenetrePilote::modifVT12()
 {
     if(a->V[0].getOuvert())
@@ -144,10 +144,13 @@ void fenetrePilote::modifVT12()
             f1->vidangeR2();
     }
     updateFenetre();
+	//si l'ouverture de la vanne répare la panne en cours, alors on arrête le chrono et met à jour le temps total écoulé
     if(!a->actionNecessaire() && (int)f1->getChrono() != 0)
     {
         time_t tmp;
         time(&tmp);
+		//si on met moins de 2 secondes à résoudre une panne, ce n'est pas comptabilisé
+		//car cela signifie que le pilote savait qu'elle panne allait survenir et donc pas intéressant pour le score
         if((int)(tmp - f1->getChrono()) > 2)
             f1->setTempsTotalEcoule(f1->getTempsTotalEcoule() + (int) (tmp - f1->getChrono()));
         else
@@ -239,8 +242,8 @@ void fenetrePilote::modifVT23()
 }
 
 // Ferme/ouvre la vanne V12
-// Si on la ferme : vérifie si on peut alimenter un moteur de cette manière et si oui l'alimente
-// Si on l'ouvre : arrête d'alimenter un moteur si on l'alimentait
+// Si on la ferme : vérifie si on peut alimenter un moteur (qui n'est pas déjà alimenté) de cette manière et si oui l'alimente
+// Si on l'ouvre : arrête d'alimenter un moteur si on l'alimentait via cette vanne
 void fenetrePilote::modifV12()
 {
     if(a->V[2].getOuvert())
@@ -358,9 +361,9 @@ void fenetrePilote::modifV23()
 }
 
 //Allume/éteint la pompe secondaire du moteur correspondant
-// Si on l'allume on vérifie, on alimente le moteur ayant le même nombre si la pompe principale n'est pas
-// fonctionnelle ou si il n'y a aucun autre moteur à alimenter, dans le cas contraire on allume l'autre moteur
-// Si on l'éteint on coupe l'apport en carburant auprès du moteur précédemment alimenté
+// Si on l'allume et que le reservoir est rempli, on alimente le moteur ayant le même nombre si la pompe principale n'est pas
+// fonctionnelle ou si il n'y a aucun autre moteur à alimenter, dans le cas contraire on alimente l'autre moteur si la vanne correspondante est fermée
+// Si on l'éteint, on coupe l'apport en carburant auprès du moteur alimenté par cette pompe et on regarde si une autre pompe peut alimenter le moteur qu'elle alimentait
 void fenetrePilote::modifP12()
 {
     if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())

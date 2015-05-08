@@ -202,30 +202,44 @@ void MainWindow::saveScore()
     }
 }
 
+//Renvoi le chrono 
+
 time_t MainWindow :: getChrono(){
     return chrono;
 }
 
+//Modifie le chrono
+
 void MainWindow :: setChrono(int temps){
     chrono = temps;
 }
+
+//Lance un chrono et incrémente le nombre de chrono lancé
 
 void MainWindow :: demarrerChrono(){
     time(&chrono);
     nombreDeChrono++;
 }
 
+//Renvoi le temps total écoulé pour résoudre les pannes
+
 int MainWindow :: getTempsTotalEcoule(){
     return tempsTotalEcoule;
 }
+
+//Renvoi le nombre de chrono lancé
 
 int MainWindow :: getNombreDeChrono(){
     return nombreDeChrono;
 }
 
+//Décrément le nombre de chrono lancé
+
 void MainWindow :: decrementerNombreDeChrono(){
     nombreDeChrono--;
 }
+
+//Mofidie le temps total écoulé
 
 void MainWindow :: setTempsTotalEcoule (int temps){
     tempsTotalEcoule = temps;
@@ -320,6 +334,9 @@ void MainWindow::on_actionPannes_automatiques_triggered()
 }
 
 // Met en panne la pompe P11
+//On vérifie donc si la pompe secondaire de ce réservoir est allumée, si elle l'est on change le moteur qu'elle alimente
+//Car une pompe secondaire alimente en priorité son moteur.
+//Si la pompe secondaire n'est pas allumée, alors on regarde si une autre pompe secondaire a la possibilité d'alimenter ce moteur
 
 void MainWindow::panneP11()
 {
@@ -336,6 +353,7 @@ void MainWindow::panneP11()
             switch (moteurAlimente) {
 
                 case 1:
+					//On regarde si une autre pompe secondaire peut alimenter le moteur que la pompe 2 alimentait avant
                     if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
                         a->moteur[2][1] = 1;
                     break;
@@ -357,6 +375,7 @@ void MainWindow::panneP11()
     }
     a->R[0].getPompe1().panne();
     updateFenetre();
+	//Si l'avion ne peut plus fonctionner alors on ne compte pas le dernier chrono et on réinitialise la simulation
     if(!a->peutFonctionner())
     {
         decrementerNombreDeChrono();
@@ -378,6 +397,9 @@ void MainWindow::panneP11()
 }
 
 // Met en panne la pompe P12
+//On vérifie si elle était en marche et si oui on regarde ce qu'elle alimentait et si une autre pompe secondaire peut alimenter
+//ce qu'elle alimentait
+//sinon on la met juste en panne
 
 void MainWindow::panneP12()
 {
@@ -431,6 +453,7 @@ void MainWindow::panneP12()
 }
 
 // Met en panne la pompe P21
+// Fonctionne comme P11
 
 void MainWindow::panneP21()
 {
@@ -488,6 +511,7 @@ void MainWindow::panneP21()
 }
 
 // Met en panne la pompe P22
+// Fonctionne comme P12
 
 void MainWindow::panneP22()
 {
@@ -541,6 +565,7 @@ void MainWindow::panneP22()
 }
 
 // Met en panne la pompe P31
+// Fonctionne comme P11
 
 void MainWindow::panneP31()
 {
@@ -598,6 +623,7 @@ void MainWindow::panneP31()
 }
 
 // Met en panne la pompe P32
+// Fonctionne comme P12
 
 void MainWindow::panneP32()
 {
@@ -648,6 +674,11 @@ void MainWindow::panneP32()
 }
 
 // Vidange le réservoir R1
+//On vérifie si le réservoir peut être alimenter par un voisin, 
+//Si oui on le vidange puis on remet rempli a true
+//Sinon on met en panne sa ou ses pompes si elles étaient alimentées (pour qu'elles ne puissent plus alimenter des moteurs, car elles n'ont plus de carburant)
+// puis on les remet en marche (car elles restent allumées même avec leur réservoir vide),  puis on vidange
+//Ensuite on vérifie que ce moteur la n'en alimentait pas un autre
 
 void MainWindow::vidangeR1()
 {
@@ -696,6 +727,8 @@ void MainWindow::vidangeR1()
 }
 
 // Vidange le réservoir R2
+//idem que vidangeR1
+//Sauf que le reservoir 2 peut alimenter ou être alimenté par les deux autres moteurs (comme il est au milieu)
 
 void MainWindow::vidangeR2()
 {
@@ -747,6 +780,7 @@ void MainWindow::vidangeR2()
 }
 
 // Vidange le réservoir R3
+//idem que vidangeR1
 
 void MainWindow::vidangeR3()
 {
@@ -794,7 +828,7 @@ void MainWindow::vidangeR3()
     }
 }
 
-// Fait tomber aléatoirement un élément de l'avion
+// Fait tomber aléatoirement en panne un élément de l'avion
 
 void MainWindow::panneAlea()
 {

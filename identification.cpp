@@ -74,7 +74,7 @@ void Identification::on_validation_accepted()
             QMessageBox::warning(this, "Echec !", "Nom déjà utilisé !");
 
 
-        //Rajouter l'user dans la base si il y est pas déjà (comme ta mère)
+        //Rajouter l'user dans la base si il y est pas déjà 
 
     }
     else
