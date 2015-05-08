@@ -3495,7 +3495,7 @@
     <string>Supprimer historique</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+B</string>
    </property>
   </action>
   <action name="actionR_initialiser_Simulation">
