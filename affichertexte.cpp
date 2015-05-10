@@ -11,6 +11,8 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
     ui(new Ui::afficherTexte)
 {
     ui->setupUi(this);
+    if(!BDD.isOpen())
+        qDebug() << "Test";
     if(aAfficher == 1) // AFFICHAGE DE L'AIDE
     {
         this->setWindowTitle("Aide");
@@ -43,20 +45,20 @@ afficherTexte::afficherTexte(int aAfficher, QSqlDatabase BDD, QString nom, QWidg
         rqt.exec("SELECT Score FROM Score WHERE IdUser='"+ usrId +"'");
         int max = 0, total = 0, nbScores = 0, temp = 0;
 
-        while(rqt.isValid() && rqt.next())
-        { // parcours de tous les résultats
-            temp = rqt.value(0).toInt();
-            if( nbScores < 10)
-            { // affichage des 10 derniers
-            aEcrire += QString::number(nbScores) + ") ";
-            aEcrire += QString::number(temp);
-            aEcrire += "\n\n";
+            while(rqt.next())
+            { // parcours de tous les résultats
+                temp = rqt.value(0).toInt();
+                if( nbScores < 10)
+                { // affichage des 10 derniers
+                aEcrire += QString::number(nbScores) + ") ";
+                aEcrire += QString::number(temp);
+                aEcrire += "\n\n";
+                }
+                if(temp > max)
+                    max = temp;
+                total += temp;
+                nbScores++;
             }
-            if(temp > max)
-                max = temp;
-            total += temp;
-            nbScores++;
-        }
         //Affichage du max + la moyenne
         if(nbScores == 0)
             aEcrire += "Aucun score enregistre";

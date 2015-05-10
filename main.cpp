@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <QWidget>
 
-
 using namespace std;
 
 /* 
@@ -14,7 +13,6 @@ using namespace std;
  *
  */
 	
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

@@ -863,7 +863,7 @@ void MainWindow::arretP11()
 }
 
 // idem que panneP12 sauf qu'on ne vérifie pas que l'avion peut marcher (on le revérifiera dans la suite de vidange)
-// cela nous évite de réinitialiser car les pompes sont considérer comme en panne
+// cela nous évite de réinitialiser car les pompes sont considérées comme en panne
 // même si cet état n'est que temporaire
 
 void MainWindow::arretP12()

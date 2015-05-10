@@ -64,14 +64,14 @@ void Identification::on_validation_accepted()
         {//Si il n'y a rien
             if(rqt.exec("INSERT INTO User (Nom, Mdp) VALUES('"+ ui->Nom->text() +"', '"+ ui->Mdp->text() +"')"))
             {
-                QMessageBox::warning(this, "Réussite !", "Inscription réussie");
+                QMessageBox::warning(this, "Réussite !", "Inscription reussie");
                 etapeSuivante = true;
             }
             else
-                QMessageBox::warning(this, "Echec !", "L'inscription a raté");
+                QMessageBox::warning(this, "Echec !", "L'inscription a rate");
         }
         else
-            QMessageBox::warning(this, "Echec !", "Nom déjà utilisé !");
+            QMessageBox::warning(this, "Echec !", "Nom déjà utilise !");
 
 
         //Rajouter l'user dans la base si il y est pas déjà 
