@@ -158,7 +158,7 @@ void MainWindow::finSimulation()
 void MainWindow::saveScore()
 {
     if(this->getNombreDeChrono() < 2){
-        QString str("Nombre de pannes reparees insufisant, score non sauvegarde !");
+        QString str("Nombre de pannes reparees insuffisant, score non sauvegarde !");
         QMessageBox::warning(this,"Score", str);
 
     }else if(a->actionNecessaire()){
