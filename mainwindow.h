@@ -49,6 +49,13 @@ public slots:
     void panneP31();
     void panneP32();
 
+    void arretP11();
+    void arretP12();
+    void arretP21();
+    void arretP22();
+    void arretP31();
+    void arretP32();
+
     void vidangeR1();
     void vidangeR2();
     void vidangeR3();

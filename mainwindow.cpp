@@ -453,7 +453,7 @@ void MainWindow::panneP12()
 }
 
 // Met en panne la pompe P21
-// Fonctionne comme P11
+// Fonctionne comme panneP11
 
 void MainWindow::panneP21()
 {
@@ -511,7 +511,7 @@ void MainWindow::panneP21()
 }
 
 // Met en panne la pompe P22
-// Fonctionne comme P12
+// Fonctionne comme panneP12
 
 void MainWindow::panneP22()
 {
@@ -565,7 +565,7 @@ void MainWindow::panneP22()
 }
 
 // Met en panne la pompe P31
-// Fonctionne comme P11
+// Fonctionne comme panneP11
 
 void MainWindow::panneP31()
 {
@@ -623,7 +623,7 @@ void MainWindow::panneP31()
 }
 
 // Met en panne la pompe P32
-// Fonctionne comme P12
+// Fonctionne comme panneP12
 
 void MainWindow::panneP32()
 {
@@ -676,9 +676,9 @@ void MainWindow::panneP32()
 // Vidange le réservoir R1
 //On vérifie si le réservoir peut être alimenter par un voisin, 
 //Si oui on le vidange puis on remet rempli a true
-//Sinon on met en panne sa ou ses pompes si elles étaient alimentées (pour qu'elles ne puissent plus alimenter des moteurs, car elles n'ont plus de carburant)
+//Sinon on met en arret sa ou ses pompes si elles étaient alimentées (pour qu'elles ne puissent plus alimenter des moteurs, car elles n'ont plus de carburant)
 // puis on les remet en marche (car elles restent allumées même avec leur réservoir vide),  puis on vidange
-//Ensuite on vérifie que ce moteur la n'en alimentait pas un autre
+//Ensuite on vérifie que ce réservoir la n'en alimentait pas un autre
 
 void MainWindow::vidangeR1()
 {
@@ -687,19 +687,16 @@ void MainWindow::vidangeR1()
         a->R[0].setRempli(true);
     }else{
         if(a->R[0].getPompe1().getEtat() == 1 && a->R[0].getPompe2().getEtat() == 1){
-            panneP11();
-            panneP12();
+            arretP11();
+            arretP12();
             a->R[0].getPompe1().marche();
             a->R[0].getPompe2().marche();
-        }else{
-            if(a->R[0].getPompe1().getEtat() == 1){
-                panneP11();
-                a->R[0].getPompe1().marche();
-            }
-            if(a->R[0].getPompe2().getEtat() == 1){
-                panneP12();
-                a->R[0].getPompe2().marche();
-            }
+        }else if(a->R[0].getPompe1().getEtat() == 1){
+            arretP11();
+            a->R[0].getPompe1().marche();
+        }else if(a->R[0].getPompe2().getEtat() == 1){
+            arretP12();
+            a->R[0].getPompe2().marche();
         }
         a->R[0].vidanger();
         updateFenetre();
@@ -728,7 +725,7 @@ void MainWindow::vidangeR1()
 
 // Vidange le réservoir R2
 //idem que vidangeR1
-//Sauf que le reservoir 2 peut alimenter ou être alimenté par les deux autres moteurs (comme il est au milieu)
+//Sauf que le reservoir 2 peut alimenter ou être alimenté par les deux autres réservoirs (comme il est au milieu)
 
 void MainWindow::vidangeR2()
 {
@@ -738,19 +735,16 @@ void MainWindow::vidangeR2()
         a->R[1].setRempli(true);
     }else{
         if(a->R[1].getPompe1().getEtat() == 1 && a->R[1].getPompe2().getEtat() == 1){
-            panneP21();
-            panneP22();
+            arretP21();
+            arretP22();
             a->R[1].getPompe1().marche();
             a->R[1].getPompe2().marche();
-        }else{
-            if(a->R[1].getPompe1().getEtat() == 1){
-                panneP21();
-                a->R[1].getPompe1().marche();
-            }
-            if(a->R[1].getPompe2().getEtat() == 1){
-                panneP22();
-                a->R[1].getPompe2().marche();
-            }
+        }else if(a->R[1].getPompe1().getEtat() == 1){
+            arretP21();
+            a->R[1].getPompe1().marche();
+        }else if(a->R[1].getPompe2().getEtat() == 1){
+            arretP22();
+            a->R[1].getPompe2().marche();
         }
         a->R[1].vidanger();
         updateFenetre();
@@ -789,19 +783,16 @@ void MainWindow::vidangeR3()
         a->R[2].setRempli(true);
     }else{
         if(a->R[2].getPompe1().getEtat() == 1 && a->R[2].getPompe2().getEtat() == 1){
-            panneP31();
-            panneP32();
+            arretP31();
+            arretP32();
             a->R[2].getPompe1().marche();
             a->R[2].getPompe2().marche();
-        }else{
-            if(a->R[2].getPompe1().getEtat() == 1){
-                panneP31();
-                a->R[2].getPompe1().marche();
-            }
-            if(a->R[2].getPompe2().getEtat() == 1){
-                panneP32();
-                a->R[2].getPompe2().marche();
-            }
+        }else if(a->R[2].getPompe1().getEtat() == 1){
+            arretP31();
+            a->R[2].getPompe1().marche();
+        }else if(a->R[2].getPompe2().getEtat() == 1){
+            arretP32();
+            a->R[2].getPompe2().marche();
         }
         a->R[2].vidanger();
         updateFenetre();
@@ -826,6 +817,240 @@ void MainWindow::vidangeR3()
             decrementerNombreDeChrono();
         chrono = 0;
     }
+}
+
+// idem que panneP11 sauf qu'on ne vérifie pas que l'avion peut marcher (on le revérifiera dans la suite de vidange)
+// cela nous évite de réinitialiser car les pompes sont considérer comme en panne
+// même si cet état n'est que temporaire
+
+void MainWindow::arretP11()
+{
+    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
+    {
+        int i;
+        int moteurAlimente = 0;
+        for(i = 1 ; i < 3 ; i++)
+            if(a->moteur[0][i] == 1)
+                moteurAlimente = i;
+        if(moteurAlimente != 0)
+        {
+            a->moteur[0][moteurAlimente] = 0;
+            switch (moteurAlimente) {
+
+                case 1:
+                    //On regarde si une autre pompe secondaire peut alimenter le moteur que la pompe 2 alimentait avant
+                    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
+                        a->moteur[2][1] = 1;
+                    break;
+
+                case 2:
+                    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert())
+                        a->moteur[1][2] = 1;
+                    break;
+            }
+        }
+    }else if(a->R[0].getPompe1().getEtat() == 1 && a->R[0].getPompe2().getEtat() != 1)
+    {
+        a->moteur[0][0] = 0;
+        if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert() && a->moteur[2][1] != 1)
+            a->moteur[2][0] = 1;
+        else if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert() && a->moteur[1][2] != 1)
+            a->moteur[1][0] = 1;
+
+    }
+    a->R[0].getPompe1().arret();
+    updateFenetre();
+}
+
+// idem que panneP12 sauf qu'on ne vérifie pas que l'avion peut marcher (on le revérifiera dans la suite de vidange)
+// cela nous évite de réinitialiser car les pompes sont considérer comme en panne
+// même si cet état n'est que temporaire
+
+void MainWindow::arretP12()
+{
+    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getRempli())
+    {
+        int moteurAlimente = 0;
+        for(int i = 0 ; i < 3 ; i++)
+            if(a->moteur[0][i] == 1)
+                moteurAlimente = i;
+        if(moteurAlimente == 0)
+        {
+            if(a->R[0].getPompe1().getEtat() != 1)
+            {
+                a->moteur[0][0] = 0;
+                if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert() && a->moteur[2][1] != 1)
+                    a->moteur[2][0] = 1;
+                else if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert() && a->moteur[1][2] != 1)
+                    a->moteur[1][0] = 1;
+            }
+        }else if(moteurAlimente == 1)
+        {
+            a->moteur[0][moteurAlimente] = 0;
+            if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert())
+                a->moteur[2][1] = 1;
+        }else{
+            a->moteur[0][moteurAlimente] = 0;
+            if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert())
+                a->moteur[1][2] = 1;
+        }
+    }
+
+    this->a->R[0].getPompe2().arret();
+    updateFenetre();
+}
+
+// Met en arret la pompe P21
+// Fonctionne comme arretP11
+
+void MainWindow::arretP21()
+{
+    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
+    {
+        int i;
+        int moteurAlimente = -1;
+        for(i = 0 ; i < 3 ; i++)
+            if(a->moteur[1][i] == 1 && i != 1)
+                moteurAlimente = i;
+        if(moteurAlimente != -1)
+        {
+            a->moteur[1][moteurAlimente] = 0;
+            switch (moteurAlimente) {
+
+                case 0:
+                    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert())
+                        a->moteur[2][0] = 1;
+                    break;
+
+                case 2:
+                    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert())
+                        a->moteur[0][2] = 1;
+                    break;
+            }
+        }
+    }else if(a->R[1].getPompe1().getEtat() == 1 && a->R[1].getPompe2().getEtat() != 1)
+    {
+        a->moteur[1][1] = 0;
+        if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert() && a->moteur[2][0] != 1)
+            a->moteur[2][1] = 1;
+        else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert() && a->moteur[0][2] != 1)
+            a->moteur[0][1] = 1;
+
+    }
+    a->R[1].getPompe1().arret();
+    updateFenetre();
+}
+
+// Met en arret la pompe P22
+// Fonctionne comme arretP12
+
+void MainWindow::arretP22()
+{
+    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getRempli())
+    {
+        int i;
+        int moteurAlimente = 1;
+        for(i = 0 ; i < 3 ; i++)
+            if(a->moteur[1][i] == 1 && i != 1)
+                moteurAlimente = i;
+        if(moteurAlimente == 1)
+        {
+            if(a->R[1].getPompe1().getEtat() != 1)
+            {
+                a->moteur[1][1] = 0;
+                if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[4].getOuvert() && a->moteur[2][0] != 1)
+                    a->moteur[2][1] = 1;
+                else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert() && a->moteur[0][2] != 1)
+                    a->moteur[0][1] = 1;
+            }
+        }else if(moteurAlimente == 0){
+            a->moteur[1][moteurAlimente] = 0;
+            if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getPompe1().getEtat() == 1 && a->R[2].getRempli() && !a->V[3].getOuvert())
+                a->moteur[2][0] = 1;
+        }else{
+            a->moteur[1][moteurAlimente] = 0;
+            if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert())
+                a->moteur[0][2] = 1;
+        }
+
+    }
+    a->R[1].getPompe2().arret();
+    updateFenetre();
+}
+
+// Met en arret la pompe P31
+// Fonctionne comme arretP11
+
+void MainWindow::arretP31()
+{
+    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
+    {
+        int i;
+        int moteurAlimente = -1;
+        for(i = 0 ; i < 2 ; i++)
+            if(a->moteur[2][i] == 1)
+                moteurAlimente = i;
+        if(moteurAlimente != -1)
+        {
+            a->moteur[2][i] = 0;
+            switch (i) {
+
+                case 0:
+                    if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert())
+                        a->moteur[1][0] = 1;
+                    break;
+
+                case 1:
+                    if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert())
+                        a->moteur[0][1] = 1;
+                    break;
+            }
+        }
+    }else if(a->R[2].getPompe1().getEtat() == 1 && a->R[2].getPompe2().getEtat() != 1)
+    {
+        a->moteur[2][2] = 0;
+        if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert() && a->moteur[1][0] != 1)
+            a->moteur[1][2] = 1;
+        else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert() && a->moteur[0][1] != 1)
+            a->moteur[0][2] = 1;
+
+    }
+    a->R[2].getPompe1().arret();
+    updateFenetre();
+}
+
+// Met en arrêt la pompe P32
+// Fonctionne comme arretP12
+
+void MainWindow::arretP32()
+{
+    if(a->R[2].getPompe2().getEtat() == 1 && a->R[2].getRempli())
+    {
+        int moteurAlimente = 2;
+        for(int i = 0 ; i < 2 ; i++)
+            if(a->moteur[2][i] == 1)
+                moteurAlimente = i;
+        if(moteurAlimente == 2){
+           if(a->R[2].getPompe1().getEtat() != 1)
+           {
+                a->moteur[2][2] = 0;
+                if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[4].getOuvert() && a->moteur[1][0] != 1)
+                    a->moteur[1][2] = 1;
+                else if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[3].getOuvert() && a->moteur[0][1] != 1)
+                    a->moteur[0][2] = 1;
+           }
+        }else if(moteurAlimente == 0){
+            a->moteur[2][moteurAlimente] = 0;
+            if(a->R[1].getPompe2().getEtat() == 1 && a->R[1].getPompe1().getEtat() == 1 && a->R[1].getRempli() && !a->V[2].getOuvert())
+                a->moteur[1][0] = 1;
+        }else{
+            a->moteur[2][moteurAlimente] = 0;
+            if(a->R[0].getPompe2().getEtat() == 1 && a->R[0].getPompe1().getEtat() == 1 && a->R[0].getRempli() && !a->V[2].getOuvert())
+                a->moteur[0][1] = 1;
+        }
+    }
+    a->R[2].getPompe2().arret();
+    updateFenetre();
 }
 
 // Fait tomber aléatoirement en panne un élément de l'avion
